@@ -9,8 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "var(--primary)",
+      },
+      fontFamily: {
+        sans: ["Roboto", "sans-serif"], // 設置 Roboto 為 sans 字型
       },
     },
   },
