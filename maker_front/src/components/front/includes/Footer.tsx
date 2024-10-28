@@ -41,6 +41,7 @@ function Footer() {
                   alt="Facebook"
                   width={260}
                   height={32}
+                  style={{ width: "auto", height: "auto" }}
                 />
               </Link>
             </Grid>
@@ -54,6 +55,7 @@ function Footer() {
                   alt="Instagram"
                   width={260}
                   height={32}
+                  style={{ width: "auto", height: "auto" }}
                 />
               </Link>
             </Grid>

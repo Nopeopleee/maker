@@ -7,3 +7,12 @@
 :root {
   --primary: #c7b299;
 }
+
+.slick-prev:before,
+.slick-next:before {
+  color: #c7b299 !important;
+}
+
+.red-text {
+  color: #b22222;
+}

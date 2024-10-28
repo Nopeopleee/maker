@@ -12,8 +12,9 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 // Components
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/front/includes/Navbar";
+import Footer from "@/components/front/includes/Footer";
+import ProgressBar from "@/components/front/includes/ProgressBar";
 
 // Mui
 import { CssBaseline } from "@mui/material";
@@ -21,6 +22,10 @@ import { ThemeProvider } from "@mui/material/styles";
 
 // Config
 import theme from "@/config/theme";
+
+// Slick Carousel
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export const metadata: Metadata = {
   title: "為創而做 Maker",
@@ -43,10 +48,12 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Navbar />
-            <main style={{ flex: 1 }}>{children}</main>
-            <Footer />
+            <ProgressBar>
+              <CssBaseline />
+              <Navbar />
+              <main style={{ flex: 1 }}>{children}</main>
+              <Footer />
+            </ProgressBar>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

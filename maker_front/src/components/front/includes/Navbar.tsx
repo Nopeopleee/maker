@@ -83,14 +83,11 @@ function Navbar() {
             }}
           >
             {pages.map((page) => (
-              <Button
-                key={page.path}
-                sx={{ my: 2, color: "black", display: "block" }}
-              >
-                <Link href={`/${page.path}`}>
+              <Link key={page.path} href={`/${page.path}`}>
+                <Button sx={{ my: 2, color: "black", display: "block" }}>
                   <Typography sx={{ fontWeight: 700 }}>{page.name}</Typography>
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             ))}
           </Box>
 
