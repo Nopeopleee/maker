@@ -1,33 +1,15 @@
-"use client";
-
 // Next.js
 import Image from "next/image";
-import { useParams } from "next/navigation";
 
 // MUI
 import { Box, Typography } from "@mui/material";
 
-export default function Banner() {
-  const params = useParams();
-  const { page } = params;
+interface BannerProps {
+  title: string;
+  image: string;
+}
 
-  let pageName = page;
-
-  switch (page) {
-    case "about":
-      pageName = "關於我們";
-      break;
-    case "activity":
-      pageName = "活動報名";
-      break;
-    case "album":
-      pageName = "活動相簿";
-      break;
-    case "contact":
-      pageName = "聯絡我們";
-      break;
-  }
-
+export default function Banner(props: BannerProps) {
   return (
     <Box
       sx={{
@@ -40,7 +22,7 @@ export default function Banner() {
       }}
     >
       <Image
-        src="https://placehold.jp/1920x432.png"
+        src={props.image}
         alt="placeholder"
         fill
         style={{ objectFit: "cover" }}
@@ -65,7 +47,7 @@ export default function Banner() {
         }}
       >
         <Typography variant="h3" color="white" align="center" fontWeight={700}>
-          {pageName}
+          {props.title}
         </Typography>
       </Box>
     </Box>

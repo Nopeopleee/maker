@@ -14,7 +14,7 @@ import "@fontsource/roboto/700.css";
 // Components
 import Navbar from "@/components/front/includes/Navbar";
 import Footer from "@/components/front/includes/Footer";
-import ProgressBar from "@/components/front/includes/ProgressBar";
+import ProgressBar from "@/components/common/ProgressBar";
 
 // Mui
 import { CssBaseline } from "@mui/material";

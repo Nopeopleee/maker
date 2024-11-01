@@ -105,7 +105,12 @@ const Contact = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            提交
+            <Typography
+              variant="button"
+              sx={{ color: "white", fontWeight: "bold" }}
+            >
+              提交
+            </Typography>
           </Button>
         </Box>
         <Box

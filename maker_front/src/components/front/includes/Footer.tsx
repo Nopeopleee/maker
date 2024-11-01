@@ -75,7 +75,12 @@ function Footer() {
             {menuItems.map((item) => (
               <Grid size={{ xs: 12, md: 3 }} key={item.path}>
                 <Link href={item.path}>
-                  <Typography variant="body1" align="center">
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    color="black"
+                    fontWeight={700}
+                  >
                     {item.name}
                   </Typography>
                 </Link>
