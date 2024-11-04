@@ -8,5 +8,11 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  if (req.nextUrl.pathname === "/backend") {
+    const url = req.nextUrl.clone();
+    url.pathname = "/backend/dashboard";
+    return NextResponse.redirect(url);
+  }
+
   return NextResponse.next();
 }

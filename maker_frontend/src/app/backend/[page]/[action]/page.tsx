@@ -6,17 +6,15 @@ import React from "react";
 // Next.js
 import { useParams } from "next/navigation";
 
-// Components
-import MyTable from "@/components/back/components/Table";
-
 const BackPage = () => {
   const params = useParams();
-  const { page } = params;
+  const { page, action } = params;
 
   return (
-    <div>
-      <MyTable />
-    </div>
+    <>
+      <div>Backend Page: {page}</div>
+      <div>Backend Action: {action}</div>
+    </>
   );
 };
 

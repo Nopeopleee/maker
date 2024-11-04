@@ -36,11 +36,16 @@ const SideNav = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+        [`& .MuiDrawer-paper`]: {
+          boxSizing: "border-box",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)",
+          borderRight: "1px solid #ddd",
+          bgcolor: "primary.light",
+        },
       }}
     >
       <Box sx={{ overflow: "auto" }}>
-        <Typography variant="h6" align="center" sx={{ my: 2 }}>
+        <Typography variant="h6" align="center" sx={{ my: 2, fontWeight: 700 }}>
           後臺管理
         </Typography>
         <List>
@@ -48,6 +53,16 @@ const SideNav = () => {
             <ListItemButton
               key={item.title}
               onClick={() => handleNavigation(item.path)}
+              sx={{
+                margin: "8px 16px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                transition: "transform 0.2s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                },
+              }}
             >
               <ListItemIcon>
                 <Icon

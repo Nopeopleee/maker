@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-tw">
+    <html lang="zh-Hant-TW">
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>

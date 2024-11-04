@@ -24,7 +24,12 @@ const TopNav = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar sx={{ justifyContent: "flex-end", bgcolor: "white" }}>
+      <Toolbar
+        sx={{
+          justifyContent: "flex-end",
+          bgcolor: "primary.light",
+        }}
+      >
         <Box>
           <Button
             color="inherit"

@@ -1,6 +1,9 @@
 import SideNav from "@/components/back/layout/SideNav";
 import TopNav from "@/components/back/layout/TopNav";
-import { Box, Card } from "@mui/material";
+import { Box, Card, CardContent, Divider } from "@mui/material";
+
+// Components
+import BreadCrumb from "@/components/back/components/BreadCrumb";
 
 const BackendLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -22,12 +25,16 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
             sx={{
               width: "100%",
               p: 2,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              border: "1px solid #f4f4f4",
+              boxSizing: "border-box",
+              boxShadow: "4px 4px 8px 0 rgba(0,0,0,0.2)",
             }}
           >
-            {children}
+            <CardContent>
+              <BreadCrumb />
+              <Divider sx={{ mt: 2, mb: 4 }} />
+              {children}
+            </CardContent>
           </Card>
         </Box>
       </Box>

@@ -7,6 +7,7 @@ import { Metadata } from "next";
 // MUI
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 
 // Config
 import theme from "@/config/theme";
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 
 const BackendLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="zh-tw">
+    <html lang="zh-Hant-TW">
       <body
         style={{
           display: "flex",
@@ -26,7 +27,10 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
