@@ -12,7 +12,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/config/theme";
 
 export const metadata: Metadata = {
-  title: "為創而做 Maker",
+  title: "為創而做 Maker - 後臺管理",
   description: "為創而做 Maker 是一個為創意而生的社群。",
 };
 

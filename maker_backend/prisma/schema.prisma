@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model languages {
+  id         Int          @id @default(autoincrement())
+  code       String       @unique
+  name       String
+  status     Boolean      @default(true)
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  homepages  homepages[]
+  menu_types menu_types[]
+}
+
+model admins {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  name       String?
+  password   String?
+  status     Boolean      @default(true)
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  audit_logs audit_logs[]
+}
+
+model settings {
+  id         Int      @id @default(autoincrement())
+  type       Int      @db.UnsignedTinyInt
+  name       String   @unique
+  value      String
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model audit_logs {
+  id         Int      @id @default(autoincrement())
+  admin      admins?  @relation(fields: [admin_id], references: [id], onDelete: SetNull)
+  admin_id   Int?
+  action     String
+  message    String
+  ip         String
+  created_at DateTime @default(now())
+}
+
+model menu_types {
+  id          Int        @id @default(autoincrement())
+  language    languages? @relation(fields: [language_id], references: [id], onDelete: SetNull)
+  language_id Int?       @default(1)
+  name        String
+  status      Boolean    @default(true)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  menus       menus[]
+}
+
+model menus {
+  id             Int            @id @default(autoincrement())
+  menu_type      menu_types     @relation(fields: [menu_type_id], references: [id], onDelete: Cascade)
+  menu_type_id   Int
+  parent_menu_id Int?
+  parent_menu    menus?         @relation("ParentChild", fields: [parent_menu_id], references: [id], onDelete: Cascade)
+  child_menus    menus[]        @relation("ParentChild")
+  alias          String         @unique
+  title          String
+  link           String?
+  type           Int            @db.UnsignedTinyInt
+  style          Int?           @db.UnsignedTinyInt
+  level          Int            @default(0)
+  order          Int            @default(0)
+  status         Boolean        @default(true)
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  cms_content    cms_contents[]
+}
+
+model homepages {
+  id           Int            @id @default(autoincrement())
+  language     languages?     @relation(fields: [language_id], references: [id], onDelete: SetNull)
+  language_id  Int?           @default(1)
+  type         Int            @db.UnsignedTinyInt
+  status       Boolean        @default(true)
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  home_banners home_banners[]
+  home_blocks  home_blocks[]
+}
+
+model home_banners {
+  id          Int       @id @default(autoincrement())
+  homepage    homepages @relation(fields: [homepage_id], references: [id], onDelete: Cascade)
+  homepage_id Int
+  image       String
+  image_alt   String?
+  title       String?
+  subtitle_1  String?
+  subtitle_2  String?
+  link        String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+}
+
+model home_blocks {
+  id            Int             @id @default(autoincrement())
+  homepage      homepages       @relation(fields: [homepage_id], references: [id], onDelete: Cascade)
+  homepage_id   Int
+  type          Int             @db.UnsignedTinyInt
+  title         String?
+  content       String?         @db.Text
+  image         String?
+  image_alt     String?
+  link          String?
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  block_details block_details[]
+}
+
+model block_details {
+  id         Int         @id @default(autoincrement())
+  block      home_blocks @relation(fields: [block_id], references: [id], onDelete: Cascade)
+  block_id   Int
+  title      String?
+  subtitle   String?
+  content    String?     @db.Text
+  image      String?
+  image_alt  String?
+  status     Boolean     @default(true)
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+}
+
+model cms_contents {
+  id                  Int                   @id @default(autoincrement())
+  menu                menus                 @relation(fields: [menu_id], references: [id], onDelete: Cascade)
+  menu_id             Int
+  type                Int                   @db.UnsignedTinyInt
+  alias               String                @unique
+  title               String
+  content             String                @db.Text
+  status              Boolean               @default(true)
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  cms_content_details cms_content_details[]
+}
+
+model cms_content_details {
+  id          Int          @id @default(autoincrement())
+  cms_content cms_contents @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  content_id  Int
+  title       String
+  subtitle    String
+  content     String       @db.Text
+  status      Boolean      @default(true)
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+}
+
+model previews {
+  id         Int      @id @default(autoincrement())
+  data       String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

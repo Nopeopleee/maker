@@ -1,12 +1,22 @@
 "use client";
 
+// React
 import React from "react";
+
+// Next.js
 import { useRouter } from "next/navigation";
+
+// MUI
 import { AppBar, Toolbar, Button, Box } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const TopNav = () => {
   const router = useRouter();
+
+  const handleViewFrontend = () => {
+    window.open("/", "_blank");
+  };
 
   const handleLogout = () => {
     router.push("/backend/logout");
@@ -18,8 +28,8 @@ const TopNav = () => {
         <Box>
           <Button
             color="inherit"
-            startIcon={<ExitToAppIcon />}
-            onClick={handleLogout}
+            startIcon={<Icon icon="carbon:screen" />}
+            onClick={handleViewFrontend}
           >
             前台
           </Button>

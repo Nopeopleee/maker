@@ -1,0 +1,8 @@
+{
+  "watch": ["src", ".env", "prisma/schema.prisma"],
+  "ext": "ts,js,json,ejs",
+  "ignore": ["dist"],
+  "exec": "npm run prisma:migrate && npm run start:prod",
+  "restartable": "rs",
+  "exitcrash": true
+}

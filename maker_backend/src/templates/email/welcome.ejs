@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>歡迎加入</title>
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      .container {
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .content {
+        max-width: 600px;
+        width: 100%;
+        background-color: #ffffff;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center;
+      }
+      .logo {
+        max-width: 150px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        color: #ff6f61;
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #666666;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #ffffff;
+        background-color: #ff6f61;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .button:hover {
+        background-color: #ff4a3d;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #999999;
+        text-align: center;
+      }
+      .footer p {
+        color: #999999;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <img src="<%= locals.logo_url %>" alt="Logo" class="logo" />
+        <h1>歡迎加入我們的活動報名系統！</h1>
+        <p>親愛的 <%= locals.member.name %>，</p>
+        <p>
+          感謝您註冊並加入我們的活動報名系統。我們很高興能夠為您提供活動資訊和報名服務。
+        </p>
+        <p>請隨時登入我們的網站，進行報名。</p>
+        <p>如果您有任何問題或需要幫助，請隨時聯繫我們的客服團隊。</p>
+        <p>祝您有美好的一天！</p>
+        <p>敬上，<br />活動報名系統團隊</p>
+        <a href="<%= locals.front_url %>" class="button">立即登入</a>
+      </div>
+      <div class="footer">
+        <p>此郵件由系統自動發送，請勿回覆。</p>
+      </div>
+    </div>
+  </body>
+</html>

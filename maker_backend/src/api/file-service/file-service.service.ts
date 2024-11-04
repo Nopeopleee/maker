@@ -1,0 +1,245 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import * as util from 'util';
+import * as moment from 'moment-timezone';
+import * as mime from 'mime-types';
+import { FileDto } from './dto/file.dto';
+import { FilePathDto } from './dto/file-path.dto';
+
+@Injectable()
+export class FileServiceService {
+  constructor() {}
+
+  private readonly apiVersion = '1';
+
+  /**
+   * Get file list
+   * @returns
+   */
+  async getFileList(filePath: string): Promise<FileDto[]> {
+    try {
+      const originalPath = filePath;
+      const readdir = util.promisify(fs.readdir);
+      const stat = util.promisify(fs.stat);
+      let directoryPath = '';
+      if (filePath && filePath === 'system') {
+        directoryPath = `./storage/files/system`;
+      } else {
+        directoryPath = `./storage/files/system/${filePath}`;
+      }
+      const files = await readdir(directoryPath);
+
+      const fileList = await Promise.all(
+        files.map(async (file) => {
+          const filePath = `${directoryPath}/${file}`;
+          const fileInfo = await stat(filePath);
+          const modDate = moment(fileInfo.mtime).tz('Asia/Taipei').format();
+          const mimeType = mime.lookup(filePath) || 'application/octet-stream';
+          if (mimeType.includes('image')) {
+            const encodedOriginalPath = encodeURIComponent(originalPath);
+            const encodedFile = encodeURIComponent(file);
+            return {
+              id: fileInfo.ino,
+              name: file,
+              isDir: fileInfo.isDirectory(),
+              size: fileInfo.size,
+              modDate: modDate,
+              thumbnailUrl: `${process.env.APP_URL}/api/v${this.apiVersion}/file-service/${encodedOriginalPath}%2F${encodedFile}`,
+            };
+          }
+
+          return {
+            id: fileInfo.ino,
+            name: file,
+            isDir: fileInfo.isDirectory(),
+            size: fileInfo.size,
+            modDate: modDate,
+          };
+        }),
+      );
+
+      return fileList;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Get a file
+   * @returns
+   */
+  async getFile(filePath: string): Promise<{ file: Buffer; mimeType: string }> {
+    try {
+      const readFile = util.promisify(fs.readFile);
+      const file = await readFile(`./storage/files/system/${filePath}`);
+      const mimeType =
+        mime.lookup(`./storage/files/system/${filePath}`) ||
+        'application/octet-stream';
+      return { file, mimeType };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Delete a file
+   * @returns
+   */
+  async deleteFile(filePath: string): Promise<{ message: string }> {
+    try {
+      const rm = util.promisify(fs.rm);
+      await rm(`./storage/files/system/${filePath}`, { recursive: true });
+      return { message: '檔案已刪除' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Create a folder
+   * @returns
+   */
+  async createFolder(data: FilePathDto): Promise<any> {
+    try {
+      const mkdir = util.promisify(fs.mkdir);
+      const exists = util.promisify(fs.exists);
+      const isExists = await exists(`./storage/files/system/${data.filePath}`);
+      if (isExists) {
+        throw new BadRequestException('資料夾已存在');
+      }
+      await mkdir(`./storage/files/system/${data.filePath}`);
+      return { message: 'Folder created' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Upload files
+   * @returns
+   */
+  async uploadFiles(
+    files: Array<Express.Multer.File>,
+    filePath: string,
+  ): Promise<any> {
+    try {
+      files.forEach(async (file) => {
+        const encodedFileName = decodeURIComponent(file.originalname);
+        const path = `./storage/files/system/${filePath}/${encodedFileName}`;
+
+        fs.writeFileSync(path, file.buffer);
+      });
+      return { message: 'File uploaded' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Upload a file
+   * @returns
+   */
+  async uploadAFile(
+    file: Express.Multer.File,
+    filePath: string,
+    memberId: number,
+  ): Promise<any> {
+    try {
+      const maxSize = 1024 * 1024 * 10;
+      if (file.size > maxSize) {
+        throw new BadRequestException('檔案大小超過 10MB');
+      }
+
+      const encodedFileName = decodeURIComponent(file.originalname);
+      const path = `./storage/files/system/members/${memberId}/${filePath}/${encodedFileName}`;
+
+      fs.mkdirSync(`./storage/files/system/members/${memberId}/${filePath}`, {
+        recursive: true,
+      });
+      fs.writeFileSync(path, file.buffer);
+
+      const filepath = encodeURIComponent(
+        path.replace('./storage/files/system/', ''),
+      );
+
+      return {
+        message: 'File uploaded',
+        path: `${process.env.APP_URL}/api/v${this.apiVersion}/file-service/${filepath}`,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Move a file
+   * @returns
+   */
+  async moveFile(data: FilePathDto): Promise<any> {
+    try {
+      const rename = util.promisify(fs.rename);
+      await rename(
+        `./storage/files/system/${data.oldPath}`,
+        `./storage/files/system/${data.filePath}`,
+      );
+      return { message: 'File moved' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Rename a file
+   * @returns
+   */
+  async renameFile(data: FilePathDto): Promise<any> {
+    try {
+      const rename = util.promisify(fs.rename);
+      const exists = util.promisify(fs.exists);
+      const isExists = await exists(`./storage/files/system/${data.filePath}`);
+      if (isExists) {
+        throw new BadRequestException('檔名已存在');
+      }
+      await rename(
+        `./storage/files/system/${data.oldPath}`,
+        `./storage/files/system/${data.filePath}`,
+      );
+      return { message: 'File renamed' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * copy files
+   * @returns
+   */
+  async copyFiles(data: any): Promise<any> {
+    try {
+      const copyFile = util.promisify(fs.copyFile);
+      const exists = util.promisify(fs.exists);
+      data.files.forEach(async (file: FilePathDto) => {
+        let isExists = await exists(`./storage/files/system/${file.filePath}`);
+        while (isExists) {
+          const split = file.filePath.split('.');
+          file.filePath = `${split[0]} copy.${split[1]}`;
+          isExists = await exists(`./storage/files/system/${file.filePath}`);
+        }
+        await copyFile(
+          `./storage/files/system/${file.oldPath}`,
+          `./storage/files/system/${file.filePath}`,
+        );
+
+        if (file.action === 'cut') {
+          const rm = util.promisify(fs.rm);
+          await rm(`./storage/files/system/${file.oldPath}`, {
+            recursive: true,
+          });
+        }
+      });
+      return { message: 'Files pasted' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+}
