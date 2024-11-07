@@ -12,6 +12,9 @@ import { CssBaseline } from "@mui/material";
 // Config
 import theme from "@/config/theme";
 
+// Redux
+import { Providers } from "@/redux/provider";
+
 export const metadata: Metadata = {
   title: "為創而做 Maker - 後臺管理",
   description: "為創而做 Maker 是一個為創意而生的社群。",
@@ -19,21 +22,23 @@ export const metadata: Metadata = {
 
 const BackendLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="zh-Hant-TW">
-      <body
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {children}
-          </ThemeProvider>
-        </AppRouterCacheProvider>
-      </body>
-    </html>
+    <Providers>
+      <html lang="zh-Hant-TW">
+        <body
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {children}
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </body>
+      </html>
+    </Providers>
   );
 };
 export default BackendLayout;

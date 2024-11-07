@@ -40,7 +40,7 @@ const BreadCrumb = () => {
             href={routeTo}
             underline="hover"
             variant="body1"
-            onClick={(e) => router.push(routeTo)}
+            onClick={() => router.push(routeTo)}
           >
             {routerMap(name)}
           </Link>

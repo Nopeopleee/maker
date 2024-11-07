@@ -22,10 +22,12 @@ export class QueryDto {
   search: string;
 
   @ApiPropertyOptional({ example: 'id' })
+  @IsOptional()
   @IsString()
   orderBy: string;
 
   @ApiPropertyOptional({ example: 'asc' })
+  @IsOptional()
   @IsString()
   sortOrder: Prisma.SortOrder;
 

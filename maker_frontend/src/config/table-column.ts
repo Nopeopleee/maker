@@ -2,7 +2,7 @@ const TableColumns = {
   admins: [
     {
       id: "name",
-      label: "Name",
+      label: "使用者名稱",
     },
     {
       id: "email",
@@ -10,7 +10,7 @@ const TableColumns = {
     },
     {
       id: "created_at",
-      label: "Created At",
+      label: "建立時間",
     },
   ],
 };

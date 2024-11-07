@@ -1,10 +1,15 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const v1Prefix = "api/v1/backend";
 
 const Api = {
   backend: {
     admins: {
-      index: `${BASE_URL}/admins`,
-      options: `${BASE_URL}/admins/options`,
+      index: `${BASE_URL}/${v1Prefix}/admins`,
+      options: `${BASE_URL}/${v1Prefix}/admins/options`,
     },
   },
 };
+
+export default Api;
+
+export type ApiType = typeof Api;
