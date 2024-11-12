@@ -46,7 +46,7 @@ export class Service {
     this.auditLogService.createAdminAuditLog({
       admin_id: req.admin.sub,
       action: 'create',
-      message: `Create ${this.entity}: ${dto.name ?? dto[`${this.entity.slice(0, -1)}_details`]?.name ?? ''}`,
+      message: `Create ${this.entity}: ${dto.name ?? dto.title ?? ''}`,
       ip: req.ip,
     });
 
@@ -62,7 +62,7 @@ export class Service {
     this.auditLogService.createAdminAuditLog({
       admin_id: req.admin.sub,
       action: 'update',
-      message: `Update ${this.entity}: ${dto.name ?? dto[`${this.entity.slice(0, -1)}_details`]?.name ?? ''}`,
+      message: `Update ${this.entity}: ${dto.name ?? dto.title ?? ''}`,
       ip: req.ip,
     });
 

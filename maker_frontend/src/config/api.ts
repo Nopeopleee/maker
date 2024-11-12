@@ -7,6 +7,10 @@ const Api = {
       index: `${BASE_URL}/${v1Prefix}/admins`,
       options: `${BASE_URL}/${v1Prefix}/admins/options`,
     },
+    menus: {
+      index: `${BASE_URL}/${v1Prefix}/menus`,
+      options: `${BASE_URL}/${v1Prefix}/menus/options`,
+    },
   },
 };
 

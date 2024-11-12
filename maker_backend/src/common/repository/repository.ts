@@ -30,11 +30,6 @@ export class Repository<T, U> {
   ): Promise<{ items: T[]; data_count: number }> {
     const { page, limit, orderBy, sortOrder, menu_type_id, level } = condition;
 
-    if (menu_type_id && level >= 0) {
-      where['menu_type_id'] = menu_type_id;
-      where['level'] = level;
-    }
-
     let items = await prisma[this.entity].findMany({
       where,
       take: limit,

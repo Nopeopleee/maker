@@ -39,6 +39,7 @@ import { FilePathDto } from './dto/file-path.dto';
 // Express
 import { Request, Response } from 'express';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { AuditLogService } from 'src/common/features/audit-log/audit-log.service';
 
 @ApiTags('File Service')
 @Controller('file-service')
@@ -47,6 +48,8 @@ export class FileServiceController {
     private fileService: FileServiceService,
     private logger: LoggerService,
   ) {}
+
+  private readonly auditLogService = new AuditLogService();
 
   @Get()
   @UseGuards(JwtAdminGuard)
@@ -86,8 +89,16 @@ export class FileServiceController {
   @ApiOperation({ summary: 'Delete a file' })
   async deleteFile(
     @Param('filePath') filePath: string,
+    @Req() req: Request,
   ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'delete',
+        message: `刪除檔案: ${filePath}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.deleteFile(filePath);
     } catch (error) {
       this.logger.error(error.message, error.stack);
@@ -99,8 +110,18 @@ export class FileServiceController {
   @UseGuards(JwtAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a folder' })
-  async createFolder(@Body() data: FilePathDto): Promise<{ message: string }> {
+  async createFolder(
+    @Body() data: FilePathDto,
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'create',
+        message: `建立資料夾: ${data.filePath}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.createFolder(data);
     } catch (error) {
       this.logger.error(error.message, error.stack);
@@ -116,8 +137,16 @@ export class FileServiceController {
   async uploadFile(
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() data: FilePathDto,
+    @Req() req: Request,
   ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'create',
+        message: `上傳檔案: ${data.filePath}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.uploadFiles(files, data.filePath);
     } catch (error) {
       this.logger.error(error.message, error.stack);
@@ -183,8 +212,18 @@ export class FileServiceController {
   @UseGuards(JwtAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Move a file' })
-  async moveFile(@Body() data: FilePathDto): Promise<{ message: string }> {
+  async moveFile(
+    @Body() data: FilePathDto,
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'update',
+        message: `移動檔案: ${data.oldPath} -> ${data.filePath}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.moveFile(data);
     } catch (error) {
       this.logger.error(error.message, error.stack);
@@ -196,8 +235,18 @@ export class FileServiceController {
   @UseGuards(JwtAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Rename a file' })
-  async renameFile(@Body() data: FilePathDto): Promise<{ message: string }> {
+  async renameFile(
+    @Body() data: FilePathDto,
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'update',
+        message: `重新命名檔案: ${data.oldPath} -> ${data.filePath}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.renameFile(data);
     } catch (error) {
       this.logger.error(error.message, error.stack);
@@ -209,8 +258,18 @@ export class FileServiceController {
   @UseGuards(JwtAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Copy files' })
-  async copyFiles(@Body() data: FilePathDto[]): Promise<{ message: string }> {
+  async copyFiles(
+    @Body() data: any,
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
     try {
+      this.auditLogService.createAdminAuditLog({
+        admin_id: req.admin.sub,
+        action: 'update',
+        message: `複製或剪下檔案: ${data.files.map((item: FilePathDto) => item.filePath).join(', ')}`,
+        ip: req.ip,
+      });
+
       return await this.fileService.copyFiles(data);
     } catch (error) {
       this.logger.error(error.message, error.stack);

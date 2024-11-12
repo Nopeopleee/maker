@@ -3,6 +3,11 @@ import { type ReactNode } from "react";
 
 // Redux
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  setMessage,
+  setSeverity,
+  setOpen,
+} from "@/redux/slices/back/alertSlice";
 
 // Config
 import Api from "@/config/api";
@@ -32,62 +37,88 @@ const initialState: ListDataState = {
   params: {},
 };
 
+const createData = (item: Item) => {
+  for (const key in item) {
+    switch (key) {
+      case "created_at":
+      case "updated_at":
+        item[key] = Helper.getFormattedDate(
+          item[key] as string,
+          "YYYY/MM/DD HH:mm"
+        );
+        break;
+      default:
+        break;
+    }
+  }
+};
+
+// Fetch Options
 export const fetchOptions = createAsyncThunk(
   "listData/fetchOptions",
-  async (params: { list: keyof typeof Api.backend }) => {
-    const response = await axios.get(`${Api.backend[params.list].options}`);
+  async (list: keyof typeof Api.backend) => {
+    const response = await axios.get(`${Api.backend[list].options}`);
 
     return response.data;
   }
 );
 
+// Fetch Data
 export const fetchData = createAsyncThunk(
   "listData/fetchData",
-  async (params: { list: keyof typeof Api.backend; condition: object }) => {
-    const response = await axios.get(`${Api.backend[params.list].index}`, {
-      params: params.condition,
-    });
+  async (list: keyof typeof Api.backend, thunkApi) => {
+    try {
+      const state = thunkApi.getState() as { listData: ListDataState };
+      const { params } = state.listData;
 
-    response.data.items.forEach((item: Item) => {
-      for (const key in item) {
-        switch (key) {
-          case "created_at":
-          case "updated_at":
-            item[key] = Helper.getFormattedDate(
-              item[key] as string,
-              "YYYY/MM/DD HH:mm"
-            );
-            break;
-          default:
-            break;
-        }
-      }
-    });
+      const response = await axios.get(`${Api.backend[list]?.index}`, {
+        params,
+      });
 
-    return response.data;
+      response.data.items?.forEach((item: Item) => {
+        createData(item);
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 );
 
-// export const deleteData = createAsyncThunk(
-//   "listData/deleteData",
-//   async (
-//     params: { list: keyof typeof Api.backend; ids: number[] },
-//     { dispatch, getState }
-//   ) => {
-//     try {
-//       const { list, ids } = params;
-//       const response = await axios.delete(`${Api.backend[list].index}`, {
-//         data: { ids },
-//       });
+export const deleteData = createAsyncThunk(
+  "listData/deleteData",
+  async (
+    params: { list: keyof typeof Api.backend; ids: number[] },
+    thunkAPI
+  ) => {
+    try {
+      const { list, ids } = params;
+      const response = await axios.delete(`${Api.backend[list].index}`, {
+        data: { ids },
+      });
 
-//       return response.data;
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-// );
+      thunkAPI.dispatch(setMessage("刪除成功"));
+      thunkAPI.dispatch(setSeverity("success"));
+      thunkAPI.dispatch(setOpen(true));
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        thunkAPI.dispatch(setMessage(error.response.data.message));
+        thunkAPI.dispatch(setSeverity("error"));
+        thunkAPI.dispatch(setOpen(true));
+        return thunkAPI.rejectWithValue(error.response.data);
+      } else {
+        thunkAPI.dispatch(setMessage("An unknown error occurred"));
+        thunkAPI.dispatch(setSeverity("error"));
+        thunkAPI.dispatch(setOpen(true));
+        return thunkAPI.rejectWithValue("An unknown error occurred");
+      }
+    }
+  }
+);
 
-const listDataSlice = createSlice({
+export const listDataSlice = createSlice({
   name: "listData",
   initialState,
   reducers: {

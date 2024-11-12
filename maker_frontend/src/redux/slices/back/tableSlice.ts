@@ -1,3 +1,5 @@
+import { RootState } from "@/redux/store";
+import { createSelector } from "reselect";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface TableState {
@@ -20,7 +22,17 @@ const initialState: TableState = {
   tableSelected: [],
 };
 
-const tableSlice = createSlice({
+export const selectTableState = createSelector(
+  (state: RootState) => state.table,
+  (table) => ({
+    page: table.tablePage + 1,
+    limit: table.rowsPerPage,
+    orderBy: table.orderBy,
+    sortOrder: table.order,
+  })
+);
+
+export const tableSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
@@ -44,6 +56,12 @@ const tableSlice = createSlice({
     },
     setTableSelected: (state, action) => {
       state.tableSelected = action.payload;
+    },
+    setTableInit: (state) => {
+      state.tablePage = 0;
+      state.orderBy = "id";
+      state.order = "desc";
+      state.tableSelected = [];
     },
   },
 });

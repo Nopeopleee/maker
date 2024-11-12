@@ -3,7 +3,7 @@ import { seedAdmin } from './seeder/adminSeeder';
 import { seedLanguage } from './seeder/languageSeeder';
 import { seedHomepage } from './seeder/homepageSeeder';
 import { seedSetting } from './seeder/settingSeeder';
-import { seedMenuTypes } from './seeder/menuTypesSeeder';
+import { seedMenus } from './seeder/menusSeeder';
 
 const prisma = new PrismaClient();
 
@@ -34,14 +34,15 @@ async function main() {
     case 'setting':
       await seedSetting();
       break;
-    case 'menuTypes':
-      await seedMenuTypes();
+    case 'menus':
+      await seedMenus();
+      break;
     default:
       await seedLanguage();
       await seedAdmin();
       await seedHomepage();
       await seedSetting();
-      await seedMenuTypes();
+      await seedMenus();
       break;
   }
 

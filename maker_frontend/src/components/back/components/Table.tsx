@@ -1,7 +1,7 @@
 "use client";
 
 // Next.js
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // MUI
 import {
@@ -13,25 +13,18 @@ import {
   TableRow,
   TableSortLabel,
   Typography,
-  IconButton,
   Checkbox,
   styled,
+  Link,
 } from "@mui/material";
 
 // Redux
 import { useSelector, useDispatch } from "@/redux/store";
-import {
-  setLoading,
-  setUpdateTable,
-  setTablePage,
-  setRowsPerPage,
-  setOrderBy,
-  setOrder,
-  setTableSelected,
-} from "@/redux/slices/back/tableSlice";
+import { tableSlice } from "@/redux/slices/back/tableSlice";
 
 // Config
 import TableColumns from "@/config/table-column";
+import { ReactNode } from "react";
 
 type TableColumnKeys = keyof typeof TableColumns;
 
@@ -62,12 +55,15 @@ const data = Array.from({ length: 100 }, (_, index) => ({
 
 const MyTable = () => {
   const params = useParams();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const { page } = params as { page: string };
+
+  // Redux State
   const {
-    loading,
     updateTable,
+    loading,
     tablePage,
     rowsPerPage,
     orderBy,
@@ -76,21 +72,35 @@ const MyTable = () => {
   } = useSelector((state) => state.table);
   const { items, dataCount } = useSelector((state) => state.listData);
 
+  // Redux Actions
+  const {
+    setUpdateTable,
+    setTablePage,
+    setRowsPerPage,
+    setOrderBy,
+    setOrder,
+    setTableSelected,
+  } = tableSlice.actions;
+
   const columns = TableColumns[page as TableColumnKeys];
 
   const handleSort = (column: string) => {
     dispatch(setOrderBy(column));
     dispatch(setOrder(order === "asc" ? "desc" : "asc"));
+    dispatch(setUpdateTable(!updateTable));
   };
 
   const handlePageChange = (event: unknown, newPage: number) => {
     dispatch(setTablePage(newPage));
+    dispatch(setUpdateTable(!updateTable));
   };
 
   const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     dispatch(setRowsPerPage(parseInt(event.target.value, 10)));
+    dispatch(setTablePage(0));
+    dispatch(setUpdateTable(!updateTable));
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,6 +137,37 @@ const MyTable = () => {
     dispatch(setTableSelected(newSelected));
   };
 
+  const handleGoToEdit = (id: number) => {
+    router.push(`/backend/${page}/edit?id=${id}`);
+  };
+
+  const renderRow = (
+    column: (typeof TableColumns)[TableColumnKeys][number] & { link?: boolean },
+    row: (typeof data)[number]
+  ): ReactNode => {
+    console.log(column, row);
+
+    return (
+      <TableCell key={column.id}>
+        {column.link ? (
+          <Link
+            underline="hover"
+            sx={{ cursor: "pointer" }}
+            onClick={() => handleGoToEdit(row.id)}
+          >
+            <Typography variant="body2">
+              {row[column.id as keyof typeof row]}
+            </Typography>
+          </Link>
+        ) : (
+          <Typography variant="body2">
+            {row[column.id as keyof typeof row]}
+          </Typography>
+        )}
+      </TableCell>
+    );
+  };
+
   return (
     <>
       <CustomTable>
@@ -143,7 +184,10 @@ const MyTable = () => {
             </TableCell>
             <TableCell padding="checkbox">#</TableCell>
             {columns?.map((column) => (
-              <TableCell key={column.id}>
+              <TableCell
+                key={column.id}
+                width={columns.length === 1 ? "100%" : undefined}
+              >
                 <TableSortLabel
                   active={orderBy === column.id}
                   direction={orderBy === column.id ? order : "asc"}
@@ -156,7 +200,13 @@ const MyTable = () => {
           </TableRow>
         </CustomTableHead>
         <TableBody>
-          {dataCount > 0 ? (
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={(columns?.length ?? 0) + 2} align="center">
+                <Typography variant="body2">載入中...</Typography>
+              </TableCell>
+            </TableRow>
+          ) : dataCount > 0 ? (
             items.map((row, index) => (
               <CustomTableRow key={index} selected={isSelected(row.id)}>
                 <TableCell padding="checkbox">
@@ -166,16 +216,17 @@ const MyTable = () => {
                   />
                 </TableCell>
                 <TableCell padding="checkbox">{index + 1}</TableCell>
-                {columns?.map((column) => (
-                  <TableCell key={column.id}>
-                    {row[column.id as keyof typeof row]}
-                  </TableCell>
-                ))}
+                {columns?.map((column) =>
+                  // <TableCell key={column.id}>
+                  //   {row[column.id as keyof typeof row]}
+                  // </TableCell>
+                  renderRow(column, row)
+                )}
               </CustomTableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns?.length ?? 0 + 2} align="center">
+              <TableCell colSpan={(columns?.length ?? 0) + 2} align="center">
                 <Typography variant="body2">沒有資料</Typography>
               </TableCell>
             </TableRow>

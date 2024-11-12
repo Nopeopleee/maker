@@ -15,6 +15,9 @@ import theme from "@/config/theme";
 // Redux
 import { Providers } from "@/redux/provider";
 
+// Components
+import AlertMessage from "@/components/back/components/Alert";
+
 export const metadata: Metadata = {
   title: "為創而做 Maker - 後臺管理",
   description: "為創而做 Maker 是一個為創意而生的社群。",
@@ -33,7 +36,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              {children}
+              <AlertMessage>{children}</AlertMessage>
             </ThemeProvider>
           </AppRouterCacheProvider>
         </body>

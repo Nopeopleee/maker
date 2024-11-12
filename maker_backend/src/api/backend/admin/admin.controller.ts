@@ -40,6 +40,7 @@ import { JwtAdminGuard } from 'src/common/guards/jwt-admin/jwt-admin.guard';
 
 // Express
 import { Request } from 'express';
+import { plainToClass } from 'class-transformer';
 
 @ApiTags('Backend: Admin')
 @UseGuards(JwtAdminGuard)
@@ -85,9 +86,11 @@ export class AdminController {
   async createOne(
     @Body() data: AdminCreateDto,
     @Req() req: Request,
-  ): Promise<{ id: number }> {
+  ): Promise<AdminDto> {
     try {
-      return await this.adminService.create(data, req);
+      const admin = await this.adminService.create(data, req);
+
+      return plainToClass(AdminDto, admin);
     } catch (error) {
       this.logger.error(error.message, error.stack);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -113,12 +116,17 @@ export class AdminController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: AdminCreateDto,
     @Req() req: Request,
-  ): Promise<{ id: number }> {
+  ): Promise<AdminDto> {
     try {
-      return await this.adminService.update(id, data, req);
+      const admin = await this.adminService.update(id, data, req);
+
+      return plainToClass(AdminDto, admin);
     } catch (error) {
       this.logger.error(error.message, error.stack);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error.message,
+        error.status || HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

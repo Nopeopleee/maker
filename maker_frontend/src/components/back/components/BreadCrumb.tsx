@@ -37,10 +37,10 @@ const BreadCrumb = () => {
         ) : (
           <Link
             key={name}
-            href={routeTo}
             underline="hover"
             variant="body1"
             onClick={() => router.push(routeTo)}
+            sx={{ cursor: "pointer" }}
           >
             {routerMap(name)}
           </Link>
