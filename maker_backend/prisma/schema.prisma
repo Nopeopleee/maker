@@ -126,7 +126,7 @@ model contents {
   id              Int              @id @default(autoincrement())
   menu            menus            @relation(fields: [menu_id], references: [id], onDelete: Cascade)
   menu_id         Int
-  type            Int              @db.UnsignedTinyInt
+  type            Int              @default(1) @db.UnsignedTinyInt
   alias           String           @unique
   title           String
   text            String           @db.Text
@@ -140,7 +140,7 @@ model content_details {
   id         Int      @id @default(autoincrement())
   content    contents @relation(fields: [content_id], references: [id], onDelete: Cascade)
   content_id Int      @unique
-  type       Int      @db.UnsignedTinyInt
+  type       Int?     @db.UnsignedTinyInt
   title      String?
   text       String?  @db.Text
   image      String?

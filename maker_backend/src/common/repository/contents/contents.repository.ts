@@ -58,6 +58,7 @@ export class ContentsRepository extends Repository<
    */
   async getOptions(): Promise<any> {
     const menu_list = await this.menus.getMenuList();
+
     return { menu_list };
   }
 
@@ -96,6 +97,7 @@ export class ContentsRepository extends Repository<
         restData = plainToInstance(ContentsCreateDto, restData, {
           excludeExtraneousValues: true,
         });
+        if (!restData.alias) restData.alias = this.helper.createAlias();
         const content = await super.createOrUpdate(restData, id);
 
         // home_banners.homepage_id = homepage.id;

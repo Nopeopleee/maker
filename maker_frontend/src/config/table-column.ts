@@ -55,6 +55,7 @@ const TableColumns = {
     {
       id: "title",
       label: "名稱",
+      link: true,
     },
     {
       id: "created_at",

@@ -12,12 +12,14 @@ export class ContentsCreateDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
+  @IsOptional()
   @Type(() => Number)
   type: number;
 
   @Expose()
   @ApiProperty({ example: 'alias' })
   @IsString()
+  @IsOptional()
   alias: string;
 
   @Expose()

@@ -12,8 +12,19 @@ import "react-quill/dist/quill.snow.css";
 
 // Mui
 import { Box } from "@mui/material";
+import { Icon } from "@iconify/react/dist/iconify.js";
+
+interface EditorProps {
+  value: string;
+  setValue: (value: string) => void;
+}
 
 const CustomHeart = () => <span>♥</span>;
+const CustomImage = () => (
+  <span>
+    <Icon icon="bi:image" />
+  </span>
+);
 
 const customToolbar = () => {
   return (
@@ -39,7 +50,10 @@ const customToolbar = () => {
       <button className="ql-list" value="ordered"></button>
       <button className="ql-list" value="bullet"></button>
       <button className="ql-link"></button>
-      <button className="ql-image"></button>
+      {/* <button className="ql-image"></button> */}
+      <button className="ql-insertImage">
+        <CustomImage />
+      </button>
       <button className="ql-clean"></button>
       <button className="ql-insertHeart">
         <CustomHeart />
@@ -48,10 +62,9 @@ const customToolbar = () => {
   );
 };
 
-const TextEditor = () => {
+const TextEditor = ({ value, setValue }: EditorProps) => {
   // @ts-expect-error: ReactQuill does not support ref typing
   const quillRef = useRef<InstanceType<typeof ReactQuill> | null>(null);
-  const [value, setValue] = useState("");
 
   const modules = useMemo(
     () => ({
@@ -64,6 +77,19 @@ const TextEditor = () => {
               const range = quill.getSelection();
               if (range) {
                 quill.insertText(range.index, "♥");
+              }
+            }
+          },
+          insertImage: () => {
+            const quill = quillRef.current?.getEditor();
+            if (quill) {
+              const range = quill.getSelection();
+              if (range) {
+                quill.insertEmbed(
+                  range.index,
+                  "image",
+                  "https://via.placeholder.com/150"
+                );
               }
             }
           },

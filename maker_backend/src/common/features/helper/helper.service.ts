@@ -7,6 +7,9 @@ import { GenerateSnService } from '../generate-sn/generate-sn.service';
 import * as bcrypt from 'bcrypt';
 import { ConnectDto } from 'src/common/dtos/connect.dto';
 
+// Moment
+import * as moment from 'moment-timezone';
+
 @Injectable()
 export class HelperService {
   constructor(private readonly generateSnService: GenerateSnService) {}
@@ -228,24 +231,16 @@ export class HelperService {
    * @param format?
    * @returns string
    */
-  formatDate(date: Date | string, format = 'yyyy-MM-dd HH:mm:ss'): string {
-    if (typeof date === 'string') date = new Date(date);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const weekday = this.getWeekday(date);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+  formatDate(date: Date | string, format = 'YYYY-MM-dd HH:mm:ss'): string {
+    return moment(date).format(format);
+  }
 
-    return format
-      .replace('yyyy', year.toString())
-      .replace('MM', month.toString().padStart(2, '0'))
-      .replace('dd', day.toString().padStart(2, '0'))
-      .replace('w', weekday)
-      .replace('HH', hours.toString().padStart(2, '0'))
-      .replace('mm', minutes.toString().padStart(2, '0'))
-      .replace('ss', seconds.toString().padStart(2, '0'));
+  /**
+   * @description 產生alias
+   * @returns string
+   */
+  createAlias(): string {
+    return this.formatDate(new Date(), 'YYYYMMDD_HHmmss');
   }
 
   /**

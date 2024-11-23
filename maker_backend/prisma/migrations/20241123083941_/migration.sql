@@ -127,7 +127,7 @@ CREATE TABLE `home_details` (
 CREATE TABLE `contents` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `menu_id` INTEGER NOT NULL,
-    `type` TINYINT UNSIGNED NOT NULL,
+    `type` TINYINT UNSIGNED NOT NULL DEFAULT 1,
     `alias` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
     `text` TEXT NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE `contents` (
 CREATE TABLE `content_details` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `content_id` INTEGER NOT NULL,
-    `type` TINYINT UNSIGNED NOT NULL,
+    `type` TINYINT UNSIGNED NULL,
     `title` VARCHAR(191) NULL,
     `text` TEXT NULL,
     `image` VARCHAR(191) NULL,

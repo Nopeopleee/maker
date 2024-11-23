@@ -47,8 +47,8 @@ const ContentForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
                   required
                   variant="outlined"
                   select
-                  value={itemDetail?.type || ""}
-                  onChange={(e) => handleChange("type", e.target.value)}
+                  value={itemDetail?.menu_id || ""}
+                  onChange={(e) => handleChange("menu_id", e.target.value)}
                 >
                   {menu_list.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
@@ -93,7 +93,10 @@ const ContentForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
                 />
               </Grid>
               <Grid size={{ xs: 12, sm: 12 }}>
-                <TextEditor />
+                <TextEditor
+                  value={(itemDetail?.text as string) || ""}
+                  setValue={(value) => handleChange("text", value)}
+                />
               </Grid>
             </Grid>
           </CardContent>
