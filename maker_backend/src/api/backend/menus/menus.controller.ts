@@ -85,7 +85,7 @@ export class MenusController {
   async createOne(
     @Body() data: MenusCreateDto,
     @Req() req: Request,
-  ): Promise<{ id: number }> {
+  ): Promise<MenusDto> {
     try {
       return await this.menusService.create(data, req);
     } catch (error) {
@@ -113,7 +113,7 @@ export class MenusController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: MenusCreateDto,
     @Req() req: Request,
-  ): Promise<{ id: number }> {
+  ): Promise<MenusDto> {
     try {
       return await this.menusService.update(id, data, req);
     } catch (error) {

@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 
 // Config & Types
 import type Api from "@/config/api";
+import ListPage from "@/config/list-page";
 
 const useList = (page: keyof typeof Api.backend) => {
   const dispatch = useDispatch();
@@ -29,20 +30,20 @@ const useList = (page: keyof typeof Api.backend) => {
   const tableState = useSelector(selectTableState);
 
   // Redux Actions
-  const { setTablePage, setTableInit, setUpdateTable, setTableSelected } =
-    tableSlice.actions;
+  const { setTableInit, setUpdateTable, setTableSelected } = tableSlice.actions;
   const { setParams, setItems, setDataCount } = listDataSlice.actions;
   const { setItemDetail } = innerDataSlice.actions;
   const { setOpen, setMessage, setSeverity } = alertSlice.actions;
 
   useEffect(() => {
+    dispatch(setTableInit());
     dispatch(setItems([]));
     dispatch(setDataCount(0));
-    dispatch(setTableInit());
     dispatch(setItemDetail({}));
-  }, [dispatch, setItems, setDataCount, setTableInit]);
+  }, [dispatch, setItems, setDataCount, setTableInit, setItemDetail]);
 
   useEffect(() => {
+    if (!ListPage.includes(page)) return;
     const fetchDataAsync = async () => {
       dispatch(setParams(tableState));
       await dispatch(fetchOptions(page));
@@ -50,7 +51,7 @@ const useList = (page: keyof typeof Api.backend) => {
     };
 
     fetchDataAsync();
-  }, [updateTable, page, dispatch, setParams, setTablePage, tableState]);
+  }, [updateTable, page, dispatch, setParams, tableState]);
 
   const handleCreate = () => {
     router.push(`/backend/${page}/create`);

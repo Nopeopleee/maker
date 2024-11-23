@@ -14,11 +14,6 @@ export class MenusDto {
   id: number;
 
   @ApiProperty({ example: 1 })
-  @IsInt()
-  @Type(() => Number)
-  menu_type_id?: number;
-
-  @ApiProperty({ example: 1 })
   @Type(() => Number)
   parent_menu_id?: number | null;
 

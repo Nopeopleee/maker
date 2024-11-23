@@ -49,19 +49,19 @@ export class HomepagesController {
     private readonly logger: LoggerService,
   ) {}
 
-  // @Get()
-  // @ApiOperation({ summary: 'Get all homepages' })
-  // @ApiResponse({ status: 200, type: HomepagesDto, isArray: true })
-  // async findByCondition(
-  //   @Query() query: QueryDto,
-  // ): Promise<{ items: HomepagesDto[]; data_count: number }> {
-  //   try {
-  //     return await this.homepagesService.findByCondition(query);
-  //   } catch (error) {
-  //     this.logger.error(error.message, error.stack);
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get all homepages' })
+  @ApiResponse({ status: 200, type: HomepagesDto, isArray: true })
+  async findByCondition(
+    @Query() query: QueryDto,
+  ): Promise<{ items: HomepagesDto[]; data_count: number }> {
+    try {
+      return await this.homepagesService.findByCondition(query);
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   @Get('options')
   @ApiOperation({ summary: 'Get all homepage options' })
@@ -75,21 +75,21 @@ export class HomepagesController {
     }
   }
 
-  // @Post()
-  // @ApiOperation({ summary: 'Create a new homepage' })
-  // @ApiResponse({ status: 201, type: IdDto })
-  // async createOne(
-  //   @Body() data: HomepagesCreateDto,
-  //   @Req() req: Request,
-  // ): Promise<IdDto> {
-  //   try {
-  //     const result = await this.homepagesService.create(data, req);
-  //     return { id: result.id };
-  //   } catch (error) {
-  //     this.logger.error(error.message, error.stack);
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+  @Post()
+  @ApiOperation({ summary: 'Create a new homepage' })
+  @ApiResponse({ status: 201, type: IdDto })
+  async createOne(
+    @Body() data: HomepagesCreateDto,
+    @Req() req: Request,
+  ): Promise<HomepagesDto> {
+    try {
+      const result = await this.homepagesService.create(data, req);
+      return result;
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get one homepage by id' })
@@ -117,26 +117,26 @@ export class HomepagesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: HomepagesCreateDto,
     @Req() req: Request,
-  ): Promise<IdDto> {
+  ): Promise<HomepagesDto> {
     try {
       const result = await this.homepagesService.update(id, data, req);
-      return { id: result.id };
+      return result;
     } catch (error) {
       this.logger.error(error.message, error.stack);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  // @Delete()
-  // @ApiOperation({ summary: 'Delete homepages' })
-  // @ApiResponse({ status: 203 })
-  // @HttpCode(203)
-  // async delete(@Body() data: DeleteDto, @Req() req: Request): Promise<void> {
-  //   try {
-  //     await this.homepagesService.deleteMany(data.ids, req);
-  //   } catch (error) {
-  //     this.logger.error(error.message, error.stack);
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+  @Delete()
+  @ApiOperation({ summary: 'Delete homepages' })
+  @ApiResponse({ status: 203 })
+  @HttpCode(203)
+  async delete(@Body() data: DeleteDto, @Req() req: Request): Promise<void> {
+    try {
+      await this.homepagesService.deleteMany(data.ids, req);
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

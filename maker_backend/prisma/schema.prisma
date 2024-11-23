@@ -72,45 +72,46 @@ model user_permissions {
   id         Int      @id @default(autoincrement())
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    Int
+  path       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
 model menus {
-  id             Int            @id @default(autoincrement())
-  language       languages?     @relation(fields: [language_id], references: [id], onDelete: Cascade)
-  language_id    Int?           @default(1)
+  id             Int        @id @default(autoincrement())
+  language       languages? @relation(fields: [language_id], references: [id], onDelete: Cascade)
+  language_id    Int?       @default(1)
   parent_menu_id Int?
-  parent_menu    menus?         @relation("ParentChild", fields: [parent_menu_id], references: [id], onDelete: Cascade)
-  child_menus    menus[]        @relation("ParentChild")
-  alias          String         @unique
+  parent_menu    menus?     @relation("ParentChild", fields: [parent_menu_id], references: [id], onDelete: Cascade)
+  child_menus    menus[]    @relation("ParentChild")
+  alias          String     @unique
   title          String
   link           String?
   image          String?
-  type           Int            @db.UnsignedTinyInt
-  level          Int            @default(0)
-  order          Int            @default(0)
-  status         Boolean        @default(true)
-  created_at     DateTime       @default(now())
-  updated_at     DateTime       @updatedAt
-  cms_content    cms_contents[]
+  type           Int        @db.UnsignedTinyInt
+  level          Int        @default(0)
+  order          Int        @default(0)
+  status         Boolean    @default(true)
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  content        contents[]
 }
 
 model homepages {
-  id           Int            @id @default(autoincrement())
-  language     languages?     @relation(fields: [language_id], references: [id], onDelete: SetNull)
-  language_id  Int?           @default(1)
-  type         Int            @db.UnsignedTinyInt
-  status       Boolean        @default(true)
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-  home_details home_details[]
+  id           Int           @id @default(autoincrement())
+  language     languages?    @relation(fields: [language_id], references: [id], onDelete: SetNull)
+  language_id  Int?          @default(1)
+  type         Int           @db.UnsignedTinyInt
+  status       Boolean       @default(true)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  home_details home_details?
 }
 
 model home_details {
   id          Int       @id @default(autoincrement())
   homepage    homepages @relation(fields: [homepage_id], references: [id], onDelete: Cascade)
-  homepage_id Int
+  homepage_id Int       @unique
   type        Int       @db.UnsignedTinyInt
   title       String?
   content     String?   @db.Text
@@ -121,14 +122,30 @@ model home_details {
   updated_at  DateTime  @updatedAt
 }
 
-model cms_contents {
+model contents {
+  id              Int              @id @default(autoincrement())
+  menu            menus            @relation(fields: [menu_id], references: [id], onDelete: Cascade)
+  menu_id         Int
+  type            Int              @db.UnsignedTinyInt
+  alias           String           @unique
+  title           String
+  text            String           @db.Text
+  status          Boolean          @default(true)
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  content_details content_details?
+}
+
+model content_details {
   id         Int      @id @default(autoincrement())
-  menu       menus    @relation(fields: [menu_id], references: [id], onDelete: Cascade)
-  menu_id    Int
-  alias      String   @unique
-  title      String
-  content    String   @db.Text
-  status     Boolean  @default(true)
+  content    contents @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  content_id Int      @unique
+  type       Int      @db.UnsignedTinyInt
+  title      String?
+  text       String?  @db.Text
+  image      String?
+  image_alt  String?
+  link       String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

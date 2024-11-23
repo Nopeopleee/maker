@@ -1,35 +1,46 @@
 "use client";
 
 // React
-import React from "react";
-
-// Next.js
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 // MUI
-import { AppBar, Toolbar, Button, Box } from "@mui/material";
+import { AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
+// lib
+import { removeToken } from "@/lib/auth";
+
 const TopNav = () => {
-  const router = useRouter();
+  const [user, setUser] = useState<{ name: string } | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleViewFrontend = () => {
     window.open("/", "_blank");
   };
 
   const handleLogout = () => {
-    router.push("/backend/logout");
+    removeToken();
   };
 
   return (
     <AppBar position="static">
       <Toolbar
         sx={{
-          justifyContent: "flex-end",
+          display: "flex",
+          justifyContent: "space-between",
           bgcolor: "primary.light",
         }}
       >
+        <Box>
+          <Typography variant="h6">Hi, {user?.name}</Typography>
+        </Box>
         <Box>
           <Button
             color="inherit"

@@ -25,7 +25,7 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
   const id = params.get("id");
 
   // Redux State
-  const { itemDetail } = useSelector((state) => state.innerData);
+  const { itemDetail, options } = useSelector((state) => state.innerData);
 
   // Redux Actions
   const { setItemDetail } = innerDataSlice.actions;
@@ -40,7 +40,7 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
     };
 
     fetchDataAsync();
-  }, [dispatch, page, fetchOptions, editData, params]);
+  }, [dispatch, page, params, action, id]);
 
   const handleSave = async () => {
     if (action === "create") {
@@ -79,6 +79,22 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
   };
 
   const handleChange = (key: string, value: string | number | boolean) => {
+    const column = key.split(".");
+    if (column.length > 1) {
+      const childKey = column.pop() as string;
+      const child = itemDetail[column[0]] || {};
+      const newChild = { ...child, [childKey]: value };
+
+      dispatch(
+        setItemDetail({
+          ...itemDetail,
+          [column[0]]: newChild,
+        })
+      );
+
+      return;
+    }
+
     dispatch(setItemDetail({ ...itemDetail, [key]: value }));
   };
 
@@ -94,6 +110,7 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
 
   return {
     itemDetail,
+    options,
     handleSave,
     handleSaveClose,
     handleCancel,

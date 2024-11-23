@@ -22,6 +22,22 @@ const Helper = {
   sleep: (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   },
+
+  /**
+   * @description 解析 JWT Token
+   * @param token
+   * @returns {JSON}
+   */
+  decodeToken: (token: string): JSON => {
+    const payload = token.split(".")[1];
+    const decodedPayload = decodeURIComponent(
+      atob(payload)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(decodedPayload);
+  },
 };
 
 export default Helper;

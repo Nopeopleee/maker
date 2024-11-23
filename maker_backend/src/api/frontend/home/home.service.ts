@@ -13,9 +13,8 @@ export class HomeService {
   ) {}
 
   async getHome(lang: string): Promise<any> {
-    const homepage = await this.homepages.getHomeByLanguage(lang);
-
-    return homepage;
+    // const homepage = await this.homepages.getHomeByLanguage(lang);
+    // return homepage;
   }
 
   async getWebsiteSettings(): Promise<any> {

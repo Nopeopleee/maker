@@ -69,7 +69,18 @@ export class HelperService {
     column1: string,
     column2: string,
     prefix?: string,
+    parentColumn?: string,
   ): { id: number; title: string }[] {
+    parentColumn &&
+      (data = data.map((item) => {
+        if (item[parentColumn]) {
+          const parent = data.find((d) => d[column1] === item[parentColumn]);
+          if (!parent) return item;
+          item[column2] = `${parent[column2]} > ${item[column2]}`;
+        }
+        return item;
+      }));
+
     return data.map((item) => {
       const pre = prefix?.repeat(item.level) || '';
       return {

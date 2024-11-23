@@ -36,10 +36,10 @@ const sideNav = [
     icon: "carbon:home",
   },
   {
-    id: "cms-contents",
+    id: "contents",
     title: "內容管理",
     inner: "內容",
-    path: `${prefix}/cms-contents`,
+    path: `${prefix}/contents`,
     icon: "carbon:document",
   },
   {

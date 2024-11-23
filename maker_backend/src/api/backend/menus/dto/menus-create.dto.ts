@@ -6,14 +6,9 @@ export class MenusCreateDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
+  @IsOptional()
   @Type(() => Number)
   id: number;
-
-  @Expose()
-  @ApiProperty({ example: 1 })
-  @IsInt()
-  @Type(() => Number)
-  menu_type_id?: number;
 
   @Expose()
   @ApiProperty({ example: 1 })
@@ -39,6 +34,7 @@ export class MenusCreateDto {
   @Expose()
   @IsInt()
   @ApiProperty({ example: 1 })
+  @Type(() => Number)
   type: number;
 
   @Expose()
@@ -50,6 +46,7 @@ export class MenusCreateDto {
   @Expose()
   @IsInt()
   @ApiProperty({ example: 0 })
+  @IsOptional()
   level: number;
 
   @Expose()
@@ -61,6 +58,7 @@ export class MenusCreateDto {
   @Expose()
   @IsBoolean()
   @ApiProperty({ example: true })
+  @IsOptional()
   status: boolean;
 
   @Expose()

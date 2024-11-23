@@ -1,7 +1,13 @@
 import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsEmail, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class AdminCreateDto {
   @IsEmail()
@@ -22,5 +28,6 @@ export class AdminCreateDto {
 
   @IsBoolean()
   @ApiProperty({ example: true })
+  @IsOptional()
   status: boolean;
 }

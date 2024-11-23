@@ -5,11 +5,12 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'src/common/repository/repository';
 
 // Dto
+import { MenusDto } from 'src/api/backend/menus/dto/menus.dto';
+import { MenusCreateDto } from 'src/api/backend/menus/dto/menus-create.dto';
+import { ContentsCreateDto } from 'src/api/backend/contents/dto/contents-create.dto';
 
 // Services
 import { HelperService } from 'src/common/features/helper/helper.service';
-import { MenusDto } from 'src/api/backend/menus/dto/menus.dto';
-import { MenusCreateDto } from 'src/api/backend/menus/dto/menus-create.dto';
 import MenuTypeEnum from 'src/common/enums/menu-type.enum';
 import { plainToInstance } from 'class-transformer';
 
@@ -73,23 +74,22 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
 
     let { child_menus } = data;
 
-    child_menus = child_menus
-      .map((item) => {
-        if (item.is_deleted && item.id) super.delete(item.id);
-        else if (item.is_deleted) return null;
-        else if (item.id) super.update(item.id, item);
-        else {
-          item.menu_type_id = data.menu_type_id;
-          item.level = data.level + 1;
-          item.type = data.type;
-          delete item.parent_menu_id;
+    if (child_menus && child_menus.length) {
+      child_menus = child_menus
+        .map((item) => {
+          if (item.is_deleted && item.id) super.delete(item.id);
+          else if (item.is_deleted) return null;
+          else if (item.id) super.update(item.id, item);
+          else {
+            item.level = data.level + 1;
+            item.type = data.type;
+            delete item.parent_menu_id;
 
-          return item;
-        }
-      })
-      .filter((item) => item);
+            return item;
+          }
+        })
+        .filter((item) => item);
 
-    if (child_menus.length) {
       data.child_menus = {
         connectOrCreate: child_menus.map((item) => ({
           create: item,
@@ -101,5 +101,54 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
     }
 
     return await super.createOrUpdate(data, id);
+  }
+
+  async getMenuList(): Promise<any> {
+    return this.helper.convertToOptions(
+      await super.findAll(),
+      'id',
+      'title',
+      null,
+      'parent_menu_id',
+    );
+  }
+
+  /**
+   * @description 取得選單最大深度
+   * @returns number
+   */
+  async getMaxDepth(): Promise<number> {
+    return (await super.getMax('level')) || 0;
+  }
+
+  /**
+   * @description 取得選單的文章列表
+   * @param menu_alias
+   * @returns CmsContentsDto
+   */
+  async getArticles(menu_alias: string): Promise<ContentsCreateDto> {
+    const include = {
+      cms_contents: {
+        include: {
+          cms_content_details: {
+            orderBy: { order: 'asc' },
+          },
+        },
+      },
+    };
+
+    const menu = (await super.findOne({ alias: menu_alias }, include)) as any;
+
+    if (!menu) return {} as ContentsCreateDto;
+
+    menu.cms_contents[0] = plainToInstance(
+      ContentsCreateDto,
+      menu.cms_contents[0],
+      {
+        excludeExtraneousValues: true,
+      },
+    );
+
+    return menu.cms_contents[0];
   }
 }

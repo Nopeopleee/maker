@@ -22,6 +22,13 @@ import type Api from "@/config/api";
 
 // Forms
 import AdminForm from "@/components/back/forms/admin-forms/AdminForm";
+import UserForm from "@/components/back/forms/user-forms/UserForm";
+import MenuForm from "@/components/back/forms/menu-forms/MenuForm";
+import HomepageForm from "@/components/back/forms/homepage-forms/HomepageForm";
+
+// Interfaces
+import type { ItemDetail, Options } from "@/interface/menu-form-props";
+import ContentForm from "@/components/back/forms/content-forms/ContentForm";
 
 const BackPage = () => {
   const params = useParams();
@@ -36,13 +43,48 @@ const BackPage = () => {
     handleChange,
     routerMap,
     itemDetail,
+    options,
   } = useInner(page as keyof typeof Api.backend, action as string);
 
   const renderForm = () => {
     switch (page) {
       case "admins":
         return (
-          <AdminForm itemDetail={itemDetail} handleChange={handleChange} />
+          <AdminForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+          />
+        );
+      case "users":
+        return (
+          <UserForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+          />
+        );
+      case "menus":
+        return (
+          <MenuForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+            options={options as Options}
+          />
+        );
+      case "homepages":
+        return (
+          <HomepageForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+            options={options as Options}
+          />
+        );
+      case "contents":
+        return (
+          <ContentForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+            options={options as Options}
+          />
         );
       default:
         return null;

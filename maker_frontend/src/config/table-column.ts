@@ -18,6 +18,7 @@ const TableColumns = {
     {
       id: "name",
       label: "使用者名稱",
+      link: true,
     },
     {
       id: "account",
@@ -32,6 +33,7 @@ const TableColumns = {
     {
       id: "title",
       label: "名稱",
+      link: true,
     },
     {
       id: "created_at",
@@ -40,15 +42,16 @@ const TableColumns = {
   ],
   homepages: [
     {
-      id: "title",
+      id: "home_details.title",
       label: "名稱",
+      link: true,
     },
     {
       id: "created_at",
       label: "建立時間",
     },
   ],
-  "cms-contents": [
+  contents: [
     {
       id: "title",
       label: "名稱",

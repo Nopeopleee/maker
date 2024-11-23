@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsBoolean, IsInt } from 'class-validator';
-import { HomeBannersCreateDto } from './home-banners-create.dto';
-import { HomeBlocksCreateDto } from './home-blocks-create.dto';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
+import { HomeDetailsCreateDto } from './home-details-create.dto';
 
 export class HomepagesCreateDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
+  @IsOptional()
   @Type(() => Number)
   language_id?: number;
 
@@ -20,14 +20,11 @@ export class HomepagesCreateDto {
   @Expose()
   @ApiProperty({ example: true })
   @IsBoolean()
+  @IsOptional()
   @Type(() => Boolean)
   status: boolean;
 
   @Expose()
-  @ApiProperty({ type: [HomeBannersCreateDto] })
-  home_banners?: HomeBannersCreateDto[];
-
-  @Expose()
-  @ApiProperty({ type: [HomeBlocksCreateDto] })
-  home_blocks?: HomeBlocksCreateDto[];
+  @ApiProperty({ type: HomeDetailsCreateDto })
+  home_details?: HomeDetailsCreateDto;
 }

@@ -17,6 +17,7 @@ import { Providers } from "@/redux/provider";
 
 // Components
 import AlertMessage from "@/components/back/components/Alert";
+import ClientRouterProvider from "@/components/common/ClientRouterProvider";
 
 export const metadata: Metadata = {
   title: "為創而做 Maker - 後臺管理",
@@ -36,6 +37,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline />
+              <ClientRouterProvider />
               <AlertMessage>{children}</AlertMessage>
             </ThemeProvider>
           </AppRouterCacheProvider>

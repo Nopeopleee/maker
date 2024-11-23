@@ -16,6 +16,15 @@ import Typography from "@mui/material/Typography";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 
+// Config
+import Api from "@/config/api";
+
+// Axios
+import axios from "axios";
+
+// lib
+import Helper from "@/lib/helper";
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -38,38 +47,59 @@ const Card = styled(MuiCard)(({ theme }) => ({
 export default function SignIn() {
   const router = useRouter();
 
-  const [accountError, setAccountError] = React.useState(false);
-  const [accountErrorMessage, setAccountErrorMessage] = React.useState("");
+  const [emailError, setEmailError] = React.useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (accountError || passwordError) {
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      account: data.get("account"),
-      password: data.get("password"),
-    });
+    if (emailError || passwordError) return;
 
-    router.push("/backend/dashboard");
+    try {
+      const formData = new FormData(event.currentTarget);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      const response = await axios.post(Api.backend.login.index, {
+        email,
+        password,
+      });
+      const { data } = response;
+
+      localStorage.setItem("token", data.token);
+
+      const userData = Helper.decodeToken(data.token);
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      router.push("/backend/dashboard");
+    } catch (error) {
+      console.error(error);
+      setEmailError(true);
+      setEmailErrorMessage("登入失敗，請檢查帳號和密碼");
+    }
   };
 
   const validateInputs = () => {
-    const account = document.getElementById("account") as HTMLInputElement;
+    const email = document.getElementById("email") as HTMLInputElement;
     const password = document.getElementById("password") as HTMLInputElement;
 
     let isValid = true;
 
-    if (!account.value) {
-      setAccountError(true);
-      setAccountErrorMessage("帳號為必填");
+    const emailRegex =
+      /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+
+    if (!email.value) {
+      setEmailError(true);
+      setEmailErrorMessage("帳號為必填");
+      isValid = false;
+    } else if (!emailRegex.test(email.value)) {
+      setEmailError(true);
+      setEmailErrorMessage("請輸入正確的 email 格式");
       isValid = false;
     } else {
-      setAccountError(false);
-      setAccountErrorMessage("");
+      setEmailError(false);
+      setEmailErrorMessage("");
     }
 
     if (!password.value || password.value.length < 6) {
@@ -115,18 +145,18 @@ export default function SignIn() {
         >
           <FormControl>
             <TextField
-              error={accountError}
-              helperText={accountErrorMessage}
-              id="account"
+              error={emailError}
+              helperText={emailErrorMessage}
+              id="email"
               type="text"
-              name="account"
+              name="email"
               placeholder="帳號"
               autoFocus
               required
               fullWidth
               variant="outlined"
-              color={accountError ? "error" : "primary"}
-              sx={{ ariaLabel: "account" }}
+              color={emailError ? "error" : "primary"}
+              sx={{ ariaLabel: "email" }}
             />
           </FormControl>
           <FormControl>

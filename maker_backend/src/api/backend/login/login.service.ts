@@ -27,7 +27,7 @@ export class LoginService {
       };
 
       return {
-        access_token: this.jwtService.sign(payload, jwtConfig),
+        token: this.jwtService.sign(payload, jwtConfig),
       };
     }
     throw new UnauthorizedException('錯誤的帳號或密碼');

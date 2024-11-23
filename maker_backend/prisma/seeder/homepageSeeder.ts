@@ -13,4 +13,23 @@ export const seedHomepage = async () => {
       status: true,
     },
   });
+
+  await prisma.home_details.upsert({
+    where: { id: 1 },
+    update: {
+      homepage_id: homepage.id,
+      type: 1,
+      title: '首頁大圖',
+      image: 'https://via.placeholder.com/1920x540',
+      image_alt: '首頁大圖',
+    },
+    create: {
+      id: 1,
+      homepage_id: homepage.id,
+      type: 1,
+      title: '首頁大圖',
+      image: 'https://via.placeholder.com/1920x540',
+      image_alt: '首頁大圖',
+    },
+  });
 };

@@ -11,6 +11,7 @@ import Api from "@/config/api";
 
 // Axios
 import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface ItemDetail {
   [key: string]: string | number | boolean;
@@ -30,7 +31,9 @@ const initialState: innerDataState = {
 export const fetchOptions = createAsyncThunk(
   "innerData/fetchOptions",
   async (list: keyof typeof Api.backend) => {
-    const response = await axios.get(`${Api.backend[list].options}`);
+    const response = await axiosInstance.get(
+      `${(Api.backend[list] as { options?: string })?.options}`
+    );
 
     return response.data;
   }
@@ -45,10 +48,12 @@ export const saveData = createAsyncThunk(
   ) => {
     const { list, data } = params;
     try {
-      const response = await axios.post(Api.backend[list].index, data);
+      const response = await axiosInstance.post(Api.backend[list].index, data);
+
       thunkAPI.dispatch(setMessage("新增成功"));
       thunkAPI.dispatch(setSeverity("success"));
       thunkAPI.dispatch(setOpen(true));
+
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -71,7 +76,9 @@ export const editData = createAsyncThunk(
   "innerData/editData",
   async (params: { list: keyof typeof Api.backend; id: number }) => {
     const { list, id } = params;
-    const response = await axios.get(Api.backend[list].index + `/${id}`);
+    const response = await axiosInstance.get(
+      Api.backend[list].index + `/${id}`
+    );
 
     return response.data;
   }
@@ -90,13 +97,14 @@ export const updateData = createAsyncThunk(
   ) => {
     const { list, id, data } = params;
     try {
-      const response = await axios.patch(
+      const response = await axiosInstance.patch(
         Api.backend[list].index + `/${id}`,
         data
       );
       thunkAPI.dispatch(setMessage("更新成功"));
       thunkAPI.dispatch(setSeverity("success"));
       thunkAPI.dispatch(setOpen(true));
+
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

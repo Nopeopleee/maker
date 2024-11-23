@@ -5,14 +5,12 @@ import { HomeModule } from 'src/api/backend/home/home.module';
 import { SettingModule } from 'src/api/backend/setting/setting.module';
 import { OperationLogsModule } from 'src/api/backend/operation-logs/operation-logs.module';
 import { HomepagesModule } from 'src/api/backend/homepages/homepages.module';
-import { MenuTypesModule } from 'src/api/backend/menu-types/menu-types.module';
 import { MenusModule } from 'src/api/backend/menus/menus.module';
 
 const modules = [
   LoginModule,
   AdminModule,
   HomeModule,
-  MenuTypesModule,
   MenusModule,
   SettingModule,
   OperationLogsModule,

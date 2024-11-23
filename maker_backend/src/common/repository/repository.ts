@@ -4,7 +4,7 @@ import { QueryDto } from 'src/common/dtos/query.dto';
 
 const prisma = new PrismaClient();
 
-export class Repository<T, U> {
+export class Repository<T, U extends object> {
   constructor(private readonly entity: string) {}
 
   /**
@@ -98,6 +98,9 @@ export class Repository<T, U> {
     column?: string,
   ): Promise<T> {
     let result: T;
+    if ('updated_at' in data) {
+      delete data.updated_at;
+    }
 
     if (has_id) {
       result = await prisma[this.entity].upsert({

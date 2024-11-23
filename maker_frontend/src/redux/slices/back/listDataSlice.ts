@@ -8,12 +8,14 @@ import {
   setSeverity,
   setOpen,
 } from "@/redux/slices/back/alertSlice";
+import { selectTableState } from "@/redux/slices/back/tableSlice";
 
 // Config
 import Api from "@/config/api";
 
 // Axios
 import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 
 // Lib
 import Helper from "@/lib/helper";
@@ -57,7 +59,9 @@ const createData = (item: Item) => {
 export const fetchOptions = createAsyncThunk(
   "listData/fetchOptions",
   async (list: keyof typeof Api.backend) => {
-    const response = await axios.get(`${Api.backend[list].options}`);
+    const response = await axiosInstance.get(
+      `${(Api.backend[list] as { options?: string })?.options}`
+    );
 
     return response.data;
   }
@@ -71,7 +75,7 @@ export const fetchData = createAsyncThunk(
       const state = thunkApi.getState() as { listData: ListDataState };
       const { params } = state.listData;
 
-      const response = await axios.get(`${Api.backend[list]?.index}`, {
+      const response = await axiosInstance.get(`${Api.backend[list]?.index}`, {
         params,
       });
 
@@ -94,9 +98,12 @@ export const deleteData = createAsyncThunk(
   ) => {
     try {
       const { list, ids } = params;
-      const response = await axios.delete(`${Api.backend[list].index}`, {
-        data: { ids },
-      });
+      const response = await axiosInstance.delete(
+        `${Api.backend[list].index}`,
+        {
+          data: { ids },
+        }
+      );
 
       thunkAPI.dispatch(setMessage("刪除成功"));
       thunkAPI.dispatch(setSeverity("success"));

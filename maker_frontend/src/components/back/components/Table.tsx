@@ -46,13 +46,6 @@ const CustomTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const data = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  name: `John Doe ${index}`,
-  email: `qwe ${index}`,
-  created_at: `2021-10-01`,
-}));
-
 const MyTable = () => {
   const params = useParams();
   const router = useRouter();
@@ -105,7 +98,7 @@ const MyTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
+      const newSelected = items.map((n) => n.id);
       dispatch(setTableSelected(newSelected));
       return;
     }
@@ -143,9 +136,14 @@ const MyTable = () => {
 
   const renderRow = (
     column: (typeof TableColumns)[TableColumnKeys][number] & { link?: boolean },
-    row: (typeof data)[number]
+    row: (typeof items)[number]
   ): ReactNode => {
-    console.log(column, row);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let value = row as any;
+    column.id.split(".").forEach((key) => {
+      if (!value) return;
+      value = value[key];
+    });
 
     return (
       <TableCell key={column.id}>
@@ -155,14 +153,10 @@ const MyTable = () => {
             sx={{ cursor: "pointer" }}
             onClick={() => handleGoToEdit(row.id)}
           >
-            <Typography variant="body2">
-              {row[column.id as keyof typeof row]}
-            </Typography>
+            <Typography variant="body2">{value}</Typography>
           </Link>
         ) : (
-          <Typography variant="body2">
-            {row[column.id as keyof typeof row]}
-          </Typography>
+          <Typography variant="body2">{value}</Typography>
         )}
       </TableCell>
     );
@@ -175,9 +169,12 @@ const MyTable = () => {
           <TableRow>
             <TableCell padding="checkbox">
               <Checkbox
-                checked={tableSelected.length === data.length}
+                checked={
+                  items?.length ? tableSelected.length === items?.length : false
+                }
                 indeterminate={
-                  tableSelected.length > 0 && tableSelected.length < data.length
+                  tableSelected.length > 0 &&
+                  tableSelected.length < items?.length
                 }
                 onChange={handleSelectAllClick}
               />
