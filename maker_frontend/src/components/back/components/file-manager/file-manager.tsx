@@ -36,12 +36,8 @@ const FileManager = ({
   selectedFiles,
   setSelectedFiles,
   handleDoubleClick,
+  handleGoBack,
 }: FileManagerProps) => {
-  const dispatch = useDispatch();
-
-  // Redux Action
-  const { goBack } = fileSlice.actions;
-
   const [viewMode, setViewMode] = useState<ViewMode>({ mode: "grid" });
   const [contextMenu, setContextMenu] = useState<ContextMenuType | null>(null);
 
@@ -111,7 +107,7 @@ const FileManager = ({
           size="small"
           sx={{ mr: 1 }}
           disabled={folderChain.length === 1}
-          onClick={() => dispatch(goBack())}
+          onClick={handleGoBack}
         >
           <Icon icon="bi:arrow-up" />
         </IconButton>

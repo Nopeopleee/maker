@@ -24,6 +24,8 @@ interface Files {
       index: string;
       delete: string;
       "create-folder": string;
+      upload: string;
+      download: string;
     };
   };
 }
@@ -60,6 +62,8 @@ const Api = {
     files: {
       index: `${BASE_URL}/api/v1/file-service`,
       "create-folder": `${BASE_URL}/api/v1/file-service/create-folder`,
+      upload: `${BASE_URL}/api/v1/file-service/upload`,
+      download: `${BASE_URL}/api/v1/file-service/download`,
     },
   },
 };

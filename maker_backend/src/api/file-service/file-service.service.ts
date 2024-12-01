@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as util from 'util';
 import * as moment from 'moment-timezone';
 import * as mime from 'mime-types';
+import * as archiver from 'archiver';
 import { FileDto } from './dto/file.dto';
 import { FilePathDto } from './dto/file-path.dto';
 
@@ -119,6 +120,7 @@ export class FileServiceService {
     filePath: string,
   ): Promise<any> {
     try {
+      console.log(files, filePath);
       files.forEach(async (file) => {
         const encodedFileName = decodeURIComponent(file.originalname);
         const path = `./storage/files/${filePath}/${encodedFileName}`;
@@ -160,6 +162,31 @@ export class FileServiceService {
         message: 'File uploaded',
         path: `${process.env.APP_URL}/api/v${this.apiVersion}/file-service/${filepath}`,
       };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  /**
+   * Download files
+   * @returns
+   */
+  async downloadFiles(
+    filePath: string[],
+  ): Promise<{ file: Buffer; mimeType: string }[]> {
+    try {
+      const files = [];
+      if (filePath.length === 1) {
+        const file = await this.getFile(filePath[0]);
+        files.push(file);
+      } else {
+        filePath.forEach(async (path) => {
+          const file = await this.getFile(path);
+          files.push(file);
+        });
+      }
+
+      return files;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

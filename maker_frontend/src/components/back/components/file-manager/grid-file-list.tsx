@@ -93,6 +93,7 @@ const DraggableFile = ({
             height={150}
             priority
             unoptimized
+            style={{ width: "100%", height: "auto" }}
           />
         ) : (
           <Icon

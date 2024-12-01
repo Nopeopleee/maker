@@ -82,6 +82,7 @@ interface FileManagerProps {
   selectedFiles: string[];
   setSelectedFiles: (files: string[]) => void;
   handleDoubleClick: (event: React.MouseEvent, file: FileItem) => void;
+  handleGoBack: () => void;
 }
 
 export type {

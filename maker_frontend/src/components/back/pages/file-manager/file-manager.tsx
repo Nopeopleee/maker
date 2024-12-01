@@ -14,6 +14,7 @@ import useFile from "@/hooks/useFile";
 
 // Components
 import ConfirmDialog from "@/components/back/components/ConfirmDialog";
+import DropzoneDialog from "@/components/back/components/file-manager/dropzone-dialog";
 
 const FileManagerPage = () => {
   const [filename, setFilename] = useState<string>("");
@@ -24,10 +25,13 @@ const FileManagerPage = () => {
     handleDoubleClick,
     selectedFiles,
     setSelectedFiles,
+    handleGoBack,
     createFolderAction,
     deleteFileAction,
+    uploadFileAction,
     openDeleteFile,
     openCreateFolder,
+    openUploadFile,
   } = useFile();
 
   const actions: ActionItem[] = [
@@ -36,7 +40,7 @@ const FileManagerPage = () => {
       label: "上傳檔案",
       tooltip: "上傳檔案",
       icon: "material-symbols:upload",
-      action: () => console.log("上傳檔案"),
+      action: () => uploadFileAction.handleUploadFile(),
     },
     {
       id: "2",
@@ -54,26 +58,7 @@ const FileManagerPage = () => {
     },
   ];
 
-  const actionList: ActionListItem[] = [
-    {
-      id: "1",
-      label: "刪除",
-      icon: "mdi:delete",
-      action: () => console.log("刪除"),
-    },
-    {
-      id: "2",
-      label: "移動",
-      icon: "mdi:folder-move",
-      action: () => console.log("移動"),
-    },
-    {
-      id: "3",
-      label: "複製",
-      icon: "mdi:content-copy",
-      action: () => console.log("複製"),
-    },
-  ];
+  const actionList: ActionListItem[] = [];
 
   const contextActions: ContextActionItem[] = [
     {
@@ -137,6 +122,7 @@ const FileManagerPage = () => {
         selectedFiles={selectedFiles}
         setSelectedFiles={setSelectedFiles}
         handleDoubleClick={handleDoubleClick}
+        handleGoBack={handleGoBack}
       />
       <ConfirmDialog
         open={openDeleteFile}
@@ -156,6 +142,10 @@ const FileManagerPage = () => {
         content="請輸入資料夾名稱"
         textFiled
         onChange={(value) => setFilename(value)}
+      />
+      <DropzoneDialog
+        openUploadFile={openUploadFile}
+        uploadFileAction={uploadFileAction}
       />
     </>
   );

@@ -106,19 +106,76 @@ export const createFolder = createAsyncThunk(
   }
 );
 
-// Upload File
-export const uploadFile = createAsyncThunk(
-  "file/uploadFile",
-  async (params: { filePath: string; file: File }, thunkAPI) => {
-    const formData = new FormData();
-    formData.append("file", params.file);
+// Upload Files
+export const uploadFiles = createAsyncThunk(
+  "file/uploadFiles",
+  async (params: { files: File[] }, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as { file: fileState };
+      const folderChain = state.file.folderChain;
+      const currentPath = folderChain.map((folder) => folder.name).join("/");
 
-    const response = await axiosInstance.post(
-      `${Api.backend.files.index}?filePath=${params.filePath}`,
-      formData
-    );
+      const formData = new FormData();
+      formData.append("filePath", `${currentPath}`);
+      params.files.forEach((file) => {
+        const encodedFileName = encodeURIComponent(file.name);
+        const blob = new Blob([file], { type: file.type });
+        const newFile = new File([blob], encodedFileName, { type: file.type });
+        formData.append("files", newFile);
+      });
 
-    return response.data;
+      const response = await axiosInstance.post(
+        Api.backend.files.upload,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      thunkAPI.dispatch(getFileList({ path: currentPath }));
+      thunkAPI.dispatch(setMessage(`上傳檔案成功`));
+      thunkAPI.dispatch(setSeverity("success"));
+      thunkAPI.dispatch(setOpen(true));
+    } catch (e) {
+      const error = e as { response: { data: { message: string } } };
+      thunkAPI.dispatch(setMessage(error.response.data.message));
+      thunkAPI.dispatch(setSeverity("error"));
+      thunkAPI.dispatch(setOpen(true));
+    }
+  }
+);
+
+// Download Files
+export const downloadFiles = createAsyncThunk(
+  "file/downloadFiles",
+  async (params: { filename: string }, thunkAPI) => {
+    try {
+      const { filename } = params;
+
+      const state = thunkAPI.getState() as { file: fileState };
+      const folderChain = state.file.folderChain;
+      const currentPath = folderChain.map((folder) => folder.name).join("/");
+
+      const response = await axiosInstance.get(
+        `${Api.backend.files.index}/${encodeURIComponent(
+          currentPath
+        )}%2f${filename}`
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+    } catch (e) {
+      const error = e as { response: { data: { message: string } } };
+      thunkAPI.dispatch(setMessage(error.response.data.message));
+      thunkAPI.dispatch(setSeverity("error"));
+      thunkAPI.dispatch(setOpen(true));
+    }
   }
 );
 
