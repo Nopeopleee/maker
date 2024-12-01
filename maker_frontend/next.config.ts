@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
         hostname: "placehold.jp",
         pathname: "/*",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "4000",
+        pathname: "/api/v1/file-service/**",
+      },
     ],
   },
 };

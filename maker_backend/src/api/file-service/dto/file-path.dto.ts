@@ -3,17 +3,17 @@ import { IsOptional, IsString } from 'class-validator';
 
 export class FilePathDto {
   @ApiProperty({ example: 'images' })
-  @IsString()
   @IsOptional()
+  @IsString()
   filePath?: string;
 
   @ApiProperty({ example: 'images' })
-  @IsString()
   @IsOptional()
+  @IsString()
   oldPath?: string;
 
   @ApiProperty({ example: 'cut' })
-  @IsString()
   @IsOptional()
+  @IsString()
   action?: string;
 }

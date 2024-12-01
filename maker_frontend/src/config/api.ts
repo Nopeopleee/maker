@@ -18,6 +18,16 @@ interface ApiWithoutOptions {
   };
 }
 
+interface Files {
+  backend: {
+    [key: string]: {
+      index: string;
+      delete: string;
+      "create-folder": string;
+    };
+  };
+}
+
 const Api = {
   backend: {
     login: {
@@ -47,9 +57,13 @@ const Api = {
       index: `${BASE_URL}/${v1Prefix}/contents`,
       options: `${BASE_URL}/${v1Prefix}/contents/options`,
     },
+    files: {
+      index: `${BASE_URL}/api/v1/file-service`,
+      "create-folder": `${BASE_URL}/api/v1/file-service/create-folder`,
+    },
   },
 };
 
 export default Api;
 
-export type ApiType = ApiWithOptions | ApiWithoutOptions;
+export type ApiType = ApiWithOptions | ApiWithoutOptions | Files;

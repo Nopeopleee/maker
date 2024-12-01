@@ -6,6 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  TextField,
 } from "@mui/material";
 
 interface ConfirmDialogProps {
@@ -14,6 +15,8 @@ interface ConfirmDialogProps {
   content: string;
   onConfirm: () => void;
   onCancel: () => void;
+  textFiled?: boolean;
+  onChange?: (value: string) => void;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -22,12 +25,23 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   content,
   onConfirm,
   onCancel,
+  textFiled,
+  onChange,
 }) => {
   return (
     <Dialog open={open} onClose={onCancel}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{content}</DialogContentText>
+        {textFiled && (
+          <TextField
+            autoFocus
+            size="small"
+            margin="dense"
+            fullWidth
+            onChange={(e) => onChange && onChange(e.target.value)}
+          />
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel} color="primary">

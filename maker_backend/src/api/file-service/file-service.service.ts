@@ -22,11 +22,7 @@ export class FileServiceService {
       const readdir = util.promisify(fs.readdir);
       const stat = util.promisify(fs.stat);
       let directoryPath = '';
-      if (filePath && filePath === 'system') {
-        directoryPath = `./storage/files/system`;
-      } else {
-        directoryPath = `./storage/files/system/${filePath}`;
-      }
+      directoryPath = `./storage/files/${filePath}`;
       const files = await readdir(directoryPath);
 
       const fileList = await Promise.all(
@@ -44,7 +40,7 @@ export class FileServiceService {
               isDir: fileInfo.isDirectory(),
               size: fileInfo.size,
               modDate: modDate,
-              thumbnailUrl: `${process.env.APP_URL}/api/v${this.apiVersion}/file-service/${encodedOriginalPath}%2F${encodedFile}`,
+              thumbnail: `${process.env.APP_URL}/api/v${this.apiVersion}/file-service/${encodedOriginalPath}%2F${encodedFile}`,
             };
           }
 
@@ -71,9 +67,9 @@ export class FileServiceService {
   async getFile(filePath: string): Promise<{ file: Buffer; mimeType: string }> {
     try {
       const readFile = util.promisify(fs.readFile);
-      const file = await readFile(`./storage/files/system/${filePath}`);
+      const file = await readFile(`./storage/files/${filePath}`);
       const mimeType =
-        mime.lookup(`./storage/files/system/${filePath}`) ||
+        mime.lookup(`./storage/files/${filePath}`) ||
         'application/octet-stream';
       return { file, mimeType };
     } catch (error) {
@@ -88,7 +84,7 @@ export class FileServiceService {
   async deleteFile(filePath: string): Promise<{ message: string }> {
     try {
       const rm = util.promisify(fs.rm);
-      await rm(`./storage/files/system/${filePath}`, { recursive: true });
+      await rm(`./storage/files/${filePath}`, { recursive: true });
       return { message: '檔案已刪除' };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -103,11 +99,11 @@ export class FileServiceService {
     try {
       const mkdir = util.promisify(fs.mkdir);
       const exists = util.promisify(fs.exists);
-      const isExists = await exists(`./storage/files/system/${data.filePath}`);
+      const isExists = await exists(`./storage/files/${data.filePath}`);
       if (isExists) {
         throw new BadRequestException('資料夾已存在');
       }
-      await mkdir(`./storage/files/system/${data.filePath}`);
+      await mkdir(`./storage/files/${data.filePath}`);
       return { message: 'Folder created' };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -125,7 +121,7 @@ export class FileServiceService {
     try {
       files.forEach(async (file) => {
         const encodedFileName = decodeURIComponent(file.originalname);
-        const path = `./storage/files/system/${filePath}/${encodedFileName}`;
+        const path = `./storage/files/${filePath}/${encodedFileName}`;
 
         fs.writeFileSync(path, file.buffer);
       });
@@ -151,16 +147,14 @@ export class FileServiceService {
       }
 
       const encodedFileName = decodeURIComponent(file.originalname);
-      const path = `./storage/files/system/members/${memberId}/${filePath}/${encodedFileName}`;
+      const path = `./storage/files/members/${memberId}/${filePath}/${encodedFileName}`;
 
-      fs.mkdirSync(`./storage/files/system/members/${memberId}/${filePath}`, {
+      fs.mkdirSync(`./storage/files/members/${memberId}/${filePath}`, {
         recursive: true,
       });
       fs.writeFileSync(path, file.buffer);
 
-      const filepath = encodeURIComponent(
-        path.replace('./storage/files/system/', ''),
-      );
+      const filepath = encodeURIComponent(path.replace('./storage/files/', ''));
 
       return {
         message: 'File uploaded',
@@ -179,8 +173,8 @@ export class FileServiceService {
     try {
       const rename = util.promisify(fs.rename);
       await rename(
-        `./storage/files/system/${data.oldPath}`,
-        `./storage/files/system/${data.filePath}`,
+        `./storage/files/${data.oldPath}`,
+        `./storage/files/${data.filePath}`,
       );
       return { message: 'File moved' };
     } catch (error) {
@@ -196,13 +190,13 @@ export class FileServiceService {
     try {
       const rename = util.promisify(fs.rename);
       const exists = util.promisify(fs.exists);
-      const isExists = await exists(`./storage/files/system/${data.filePath}`);
+      const isExists = await exists(`./storage/files/${data.filePath}`);
       if (isExists) {
         throw new BadRequestException('檔名已存在');
       }
       await rename(
-        `./storage/files/system/${data.oldPath}`,
-        `./storage/files/system/${data.filePath}`,
+        `./storage/files/${data.oldPath}`,
+        `./storage/files/${data.filePath}`,
       );
       return { message: 'File renamed' };
     } catch (error) {
@@ -219,20 +213,20 @@ export class FileServiceService {
       const copyFile = util.promisify(fs.copyFile);
       const exists = util.promisify(fs.exists);
       data.files.forEach(async (file: FilePathDto) => {
-        let isExists = await exists(`./storage/files/system/${file.filePath}`);
+        let isExists = await exists(`./storage/files/${file.filePath}`);
         while (isExists) {
           const split = file.filePath.split('.');
           file.filePath = `${split[0]} copy.${split[1]}`;
-          isExists = await exists(`./storage/files/system/${file.filePath}`);
+          isExists = await exists(`./storage/files/${file.filePath}`);
         }
         await copyFile(
-          `./storage/files/system/${file.oldPath}`,
-          `./storage/files/system/${file.filePath}`,
+          `./storage/files/${file.oldPath}`,
+          `./storage/files/${file.filePath}`,
         );
 
         if (file.action === 'cut') {
           const rm = util.promisify(fs.rm);
-          await rm(`./storage/files/system/${file.oldPath}`, {
+          await rm(`./storage/files/${file.oldPath}`, {
             recursive: true,
           });
         }
