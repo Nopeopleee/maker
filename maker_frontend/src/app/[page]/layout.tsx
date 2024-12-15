@@ -27,6 +27,9 @@ import theme from "@/config/theme";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Redux
+import { Providers } from "@/redux/provider";
+
 export const metadata: Metadata = {
   title: "為創而做 Maker",
   description: "為創而做 Maker 是一個為創意而生的社群。",
@@ -40,16 +43,18 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant-TW">
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <ProgressBar>
-              <CssBaseline />
-              <Navbar />
-              <main style={{ flex: 1 }}>{children}</main>
-              <Footer />
-            </ProgressBar>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <Providers>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              <ProgressBar>
+                <CssBaseline />
+                <Navbar />
+                <main style={{ flex: 1 }}>{children}</main>
+                <Footer />
+              </ProgressBar>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -8,7 +8,6 @@ import {
   setSeverity,
   setOpen,
 } from "@/redux/slices/back/alertSlice";
-import { selectTableState } from "@/redux/slices/back/tableSlice";
 
 // Config
 import Api from "@/config/api";

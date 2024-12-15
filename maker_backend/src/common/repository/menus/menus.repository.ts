@@ -103,6 +103,25 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
     return await super.createOrUpdate(data, id);
   }
 
+  /**
+   * @description Get menus by language
+   * @param language_id
+   * @returns MenusDto[]
+   */
+  async getMenusByLanguage(language_id: number): Promise<MenusDto[]> {
+    const condition = {
+      where: { language_id },
+      orderBy: { order: 'asc' },
+      select: {
+        title: true,
+        alias: true,
+        type: true,
+      },
+    };
+
+    return await super.findAll(condition);
+  }
+
   async getMenuList(): Promise<any> {
     return this.helper.convertToOptions(
       await super.findAll(),

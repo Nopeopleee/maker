@@ -43,7 +43,25 @@ export class HomeController {
     }
   }
 
-  @Get(':lang?')
+  @Get(':lang?/menu')
+  @ApiParam({
+    name: 'lang',
+    required: false,
+    description: '可不填, 語言預設為 zh-TW',
+    example: 'zh-TW',
+  })
+  @ApiOperation({ summary: '取得選單' })
+  @ApiResponse({ status: 200, type: Object })
+  async getMenu(@Param('lang') lang: string = 'zh-TW'): Promise<any> {
+    try {
+      return await this.homeService.getMenu(lang);
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':lang?/home')
   @ApiParam({
     name: 'lang',
     required: false,

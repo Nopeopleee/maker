@@ -66,6 +66,11 @@ const Api = {
       download: `${BASE_URL}/api/v1/file-service/download`,
     },
   },
+  frontend: {
+    home: {
+      menu: `${BASE_URL}/api/v1/frontend/home/zh-TW/menu`,
+    },
+  },
 };
 
 export default Api;

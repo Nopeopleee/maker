@@ -11,7 +11,7 @@ import {
 } from "@/components/back/components/file-manager/interface";
 
 // Hooks
-import useFile from "@/hooks/useFile";
+import useFile from "@/hooks/common/useFile";
 
 // Components
 import ConfirmDialog from "@/components/back/components/ConfirmDialog";

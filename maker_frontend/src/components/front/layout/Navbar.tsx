@@ -19,6 +19,9 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
+// Hooks
+import useHome from "@/hooks/front/useHome";
+
 const pages = [
   { name: "關於我們", path: "about" },
   { name: "最新消息", path: "news" },
@@ -28,6 +31,8 @@ const pages = [
 ];
 
 function Navbar() {
+  const { menus } = useHome();
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -83,10 +88,10 @@ function Navbar() {
               justifyContent: "flex-end",
             }}
           >
-            {pages.map((page) => (
-              <Link key={page.path} href={`/${page.path}`}>
+            {menus.map((menu) => (
+              <Link key={menu.alias} href={`/${menu.alias}`}>
                 <Button sx={{ my: 2, color: "black", display: "block" }}>
-                  <Typography sx={{ fontWeight: 700 }}>{page.name}</Typography>
+                  <Typography sx={{ fontWeight: 700 }}>{menu.title}</Typography>
                 </Button>
               </Link>
             ))}
@@ -120,11 +125,11 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.path} onClick={handleCloseNavMenu}>
-                  <Link href={`/${page.path}`}>
+              {menus.map((menu) => (
+                <MenuItem key={menu.alias} onClick={handleCloseNavMenu}>
+                  <Link href={`/${menu.alias}`}>
                     <Typography sx={{ fontWeight: 700 }}>
-                      {page.name}
+                      {menu.title}
                     </Typography>
                   </Link>
                 </MenuItem>

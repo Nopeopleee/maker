@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 import { useParams } from "next/navigation";
 
 // Hooks
-import useList from "@/hooks/useList";
+import useList from "@/hooks/back/useList";
 
 // Components
 import MyTable from "@/components/back/components/Table";

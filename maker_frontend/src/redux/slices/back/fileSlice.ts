@@ -14,10 +14,13 @@ import axios from "axios";
 import axiosInstance from "@/lib/axiosInstance";
 
 // Interface
-import { FolderChainItem } from "@/components/back/components/file-manager/interface";
+import {
+  FileItem,
+  FolderChainItem,
+} from "@/components/back/components/file-manager/interface";
 
 interface fileState {
-  files?: any;
+  files?: FileItem[];
   folderChain: FolderChainItem[];
 }
 
@@ -36,7 +39,7 @@ export const getFileList = createAsyncThunk(
       );
 
       return response.data;
-    } catch (e: any) {
+    } catch (error) {
       thunkAPI.dispatch(setMessage("取得檔案列表失敗"));
       thunkAPI.dispatch(setSeverity("error"));
       thunkAPI.dispatch(setOpen(true));
@@ -67,7 +70,7 @@ export const deleteFile = createAsyncThunk(
       thunkAPI.dispatch(setOpen(true));
 
       return response.data;
-    } catch (e: any) {
+    } catch (error) {
       thunkAPI.dispatch(setMessage("刪除檔案失敗"));
       thunkAPI.dispatch(setSeverity("error"));
       thunkAPI.dispatch(setOpen(true));

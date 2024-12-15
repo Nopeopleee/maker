@@ -6,6 +6,7 @@ import listDataSliceProvider from "./slices/back/listDataSlice";
 import innerDataSliceProvider from "./slices/back/innerDataSlice";
 import alertSliceProvider from "./slices/back/alertSlice";
 import fileSliceProvider from "./slices/back/fileSlice";
+import frontHomeSliceProvider from "./slices/front/homeSlice";
 
 const rootReducer = combineReducers({
   table: tableSliceReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   innerData: innerDataSliceProvider,
   alert: alertSliceProvider,
   file: fileSliceProvider,
+  frontHome: frontHomeSliceProvider,
 });
 
 export default rootReducer;

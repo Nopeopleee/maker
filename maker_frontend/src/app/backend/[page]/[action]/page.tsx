@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 import { useParams } from "next/navigation";
 
 // Hooks
-import useInner from "@/hooks/useInner";
+import useInner from "@/hooks/back/useInner";
 
 // Components
 import Buttons from "@/components/back/components/Buttons";

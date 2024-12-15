@@ -24,7 +24,7 @@ const useFile = () => {
   const [openUploadFile, setOpenUploadFile] = useState(false);
 
   // Redux State
-  const { files, folderChain } = useSelector((state) => state.file);
+  const { files = [], folderChain } = useSelector((state) => state.file);
   const currentPath = folderChain.map((folder) => folder.name).join("/");
 
   // Redux Action
