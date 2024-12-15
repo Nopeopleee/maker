@@ -21,11 +21,20 @@ import ListFileList from "./list-file-list";
 import ContextMenu from "./context-menu";
 
 // Interfaces
-import type { ViewMode, ContextMenuType, FileManagerProps } from "./interface";
+import type {
+  ViewMode,
+  ContextMenuType,
+  FileManagerProps,
+  FileItem,
+} from "./interface";
 
-// Redux
-import { useDispatch } from "@/redux/store";
-import { fileSlice } from "@/redux/slices/back/fileSlice";
+const sortFiles = (files: FileItem[]) => {
+  const dirs = files.filter((file) => file.isDir);
+  const images = files.filter((file) => !file.isDir && file.thumbnail);
+  const rest = files.filter((file) => !file.isDir && !file.thumbnail);
+
+  return [...dirs, ...images, ...rest];
+};
 
 const FileManager = ({
   files,
@@ -38,6 +47,8 @@ const FileManager = ({
   handleDoubleClick,
   handleGoBack,
 }: FileManagerProps) => {
+  files = sortFiles(files);
+
   const [viewMode, setViewMode] = useState<ViewMode>({ mode: "grid" });
   const [contextMenu, setContextMenu] = useState<ContextMenuType | null>(null);
 
@@ -72,10 +83,17 @@ const FileManager = ({
     event.preventDefault();
     const target = event.target as HTMLElement;
     const fileElement = target.closest("[data-file-name]") as HTMLElement;
-    if (fileElement) {
-      const fileId = fileElement.getAttribute("data-file-name");
-      if (fileId) {
-        handleSelect(event, fileId);
+    if (
+      fileElement &&
+      !selectedFiles.includes(
+        fileElement.getAttribute("data-file-name") as string
+      )
+    ) {
+      handleSelect(event, fileElement.getAttribute("data-file-name") as string);
+    } else if (fileElement && selectedFiles.length === 0) {
+      const fileName = fileElement.getAttribute("data-file-name");
+      if (fileName) {
+        handleSelect(event, fileName);
       }
     }
     setContextMenu(
@@ -98,7 +116,7 @@ const FileManager = ({
         borderRadius: 1,
         userSelect: "none",
       }}
-      onClick={handleClearSelection}
+      // onClick={handleClearSelection}
       onContextMenu={handleContextMenu}
     >
       {/* Breadcrumb  */}

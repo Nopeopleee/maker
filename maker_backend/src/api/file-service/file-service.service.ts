@@ -171,22 +171,25 @@ export class FileServiceService {
    * Download files
    * @returns
    */
-  async downloadFiles(
-    filePath: string[],
-  ): Promise<{ file: Buffer; mimeType: string }[]> {
+  async downloadFiles(data: {
+    filepath: string;
+    filenames: string[];
+  }): Promise<{ file: Buffer; mimeType: string }> {
     try {
+      const { filepath, filenames } = data;
       const files = [];
-      if (filePath.length === 1) {
-        const file = await this.getFile(filePath[0]);
-        files.push(file);
-      } else {
-        filePath.forEach(async (path) => {
-          const file = await this.getFile(path);
-          files.push(file);
-        });
+      filenames.forEach(async (filename) => {
+        files.push(`./storage/files/${filepath}/${filename}`);
+      });
+
+      const result = await this.compressFiles(files);
+
+      if (result) {
+        const file = await this.getFile('download.zip');
+        return file;
       }
 
-      return files;
+      throw new BadRequestException('檔案壓縮失敗');
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -262,5 +265,24 @@ export class FileServiceService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  /**
+   * Compress files
+   * @returns
+   */
+  private async compressFiles(data: string[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const zip = archiver('zip');
+      const output = fs.createWriteStream('./storage/files/download.zip');
+      zip.pipe(output);
+
+      data.forEach((file) => {
+        zip.file(file, { name: file.split('/').pop() });
+      });
+
+      zip.finalize();
+      resolve(true);
+    });
   }
 }

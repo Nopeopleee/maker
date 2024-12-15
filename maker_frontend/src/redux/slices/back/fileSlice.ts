@@ -150,26 +150,32 @@ export const uploadFiles = createAsyncThunk(
 // Download Files
 export const downloadFiles = createAsyncThunk(
   "file/downloadFiles",
-  async (params: { filename: string }, thunkAPI) => {
+  async (params: { filenames: string[] }, thunkAPI) => {
     try {
-      const { filename } = params;
+      const { filenames } = params;
 
       const state = thunkAPI.getState() as { file: fileState };
       const folderChain = state.file.folderChain;
       const currentPath = folderChain.map((folder) => folder.name).join("/");
 
-      const response = await axiosInstance.get(
-        `${Api.backend.files.index}/${encodeURIComponent(
-          currentPath
-        )}%2f${filename}`
+      const response = await axiosInstance.post(
+        `${Api.backend.files.download}`,
+        { filepath: currentPath, filenames: [...filenames] }
       );
+
+      console.log(response);
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", filename);
+      link.setAttribute("download", "download.zip");
       document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
+
+      thunkAPI.dispatch(setMessage(`下載檔案成功`));
+      thunkAPI.dispatch(setSeverity("success"));
+      thunkAPI.dispatch(setOpen(true));
     } catch (e) {
       const error = e as { response: { data: { message: string } } };
       thunkAPI.dispatch(setMessage(error.response.data.message));

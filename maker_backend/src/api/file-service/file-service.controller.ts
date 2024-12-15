@@ -187,16 +187,16 @@ export class FileServiceController {
     }
   }
 
-  @Get('download')
+  @Post('download')
   @UseGuards(JwtAdminGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Download files' })
   async downloadFile(
     @Res() res: Response,
-    @Body() filePath: string[],
+    @Body() data: { filepath: string; filenames: string[] },
   ): Promise<any> {
     try {
-      const file = await this.fileService.downloadFiles(filePath);
+      const file = await this.fileService.downloadFiles(data);
 
       res.setHeader('Content-Type', file.mimeType);
       res.setHeader('Content-Disposition', 'attachment');

@@ -22,7 +22,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 // Components
-// import Icon from "@/components/common/Icon";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 // Interfaces
@@ -93,7 +92,11 @@ const DraggableFile = ({
             height={150}
             priority
             unoptimized
-            style={{ width: "100%", height: "auto" }}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+            }}
           />
         ) : (
           <Icon

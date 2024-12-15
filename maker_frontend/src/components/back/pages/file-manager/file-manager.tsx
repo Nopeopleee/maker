@@ -7,6 +7,7 @@ import {
   ActionItem,
   ActionListItem,
   ContextActionItem,
+  FileItem,
 } from "@/components/back/components/file-manager/interface";
 
 // Hooks
@@ -29,6 +30,7 @@ const FileManagerPage = () => {
     createFolderAction,
     deleteFileAction,
     uploadFileAction,
+    downloadFilesAction,
     openDeleteFile,
     openCreateFolder,
     openUploadFile,
@@ -55,6 +57,20 @@ const FileManagerPage = () => {
       tooltip: "刪除檔案",
       icon: "mdi:delete",
       action: () => deleteFileAction.handleDeleteFile(),
+    },
+    {
+      id: "4",
+      label: "全選",
+      tooltip: "全選",
+      icon: "mdi:select-all",
+      action: () => setSelectedFiles(files.map((file: FileItem) => file.name)),
+    },
+    {
+      id: "5",
+      label: "取消選取",
+      tooltip: "取消選取",
+      icon: "mdi:select-off",
+      action: () => setSelectedFiles([]),
     },
   ];
 
@@ -95,19 +111,27 @@ const FileManagerPage = () => {
     },
     {
       id: "5",
-      label: "全選",
-      tooltip: "全選",
-      icon: "mdi:select-all",
-      hasSelected: false,
-      action: () => console.log("全選", selectedFiles),
-    },
-    {
-      id: "6",
       label: "下載",
       tooltip: "下載",
       icon: "mdi:download",
       hasSelected: true,
-      action: () => console.log("下載", selectedFiles),
+      action: () => downloadFilesAction.handleDownloadFiles(),
+    },
+    {
+      id: "6",
+      label: "全選",
+      tooltip: "全選",
+      icon: "mdi:select-all",
+      hasSelected: false,
+      action: () => setSelectedFiles(files.map((file: FileItem) => file.name)),
+    },
+    {
+      id: "7",
+      label: "取消選取",
+      tooltip: "取消選取",
+      icon: "mdi:select-off",
+      hasSelected: true,
+      action: () => setSelectedFiles([]),
     },
   ];
 

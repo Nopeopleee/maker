@@ -8,6 +8,7 @@ import {
   createFolder,
   deleteFile,
   uploadFiles,
+  downloadFiles,
   fileSlice,
 } from "@/redux/slices/back/fileSlice";
 import { FileItem } from "@/components/back/components/file-manager/interface";
@@ -87,6 +88,12 @@ const useFile = () => {
     },
   };
 
+  const downloadFilesAction = {
+    handleDownloadFiles: () => {
+      dispatch(downloadFiles({ filenames: selectedFiles }));
+    },
+  };
+
   return {
     files,
     folderChain,
@@ -97,6 +104,7 @@ const useFile = () => {
     createFolderAction,
     deleteFileAction,
     uploadFileAction,
+    downloadFilesAction,
     openCreateFolder,
     openDeleteFile,
     openUploadFile,
