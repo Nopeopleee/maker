@@ -17,7 +17,17 @@ export class HomepagesDto {
   @ApiProperty({ example: 1 })
   @IsInt()
   @Type(() => Number)
+  menu_id?: number;
+
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @Type(() => Number)
   type: number;
+
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @Type(() => Number)
+  order: number;
 
   @ApiProperty({ example: true })
   @IsBoolean()

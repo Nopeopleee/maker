@@ -4,7 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 // Repository
 import { Repository } from 'src/common/repository/repository';
 import { HomeDetailsRepository } from './home-details.repository';
-import { LanguagesRepository } from '../languages/languages.repository';
+import { MenusRepository } from '../menus/menus.repository';
 
 // Services
 import { HelperService } from 'src/common/features/helper/helper.service';
@@ -26,7 +26,7 @@ export class HomepagesRepository extends Repository<
   constructor(
     private readonly helper: HelperService,
     private readonly homeDetails: HomeDetailsRepository,
-    private readonly languages: LanguagesRepository,
+    private readonly menus: MenusRepository,
   ) {
     super('homepages');
   }
@@ -59,8 +59,9 @@ export class HomepagesRepository extends Repository<
    */
   async getOptions(): Promise<any> {
     const type_list = HomepageTypeEnum.LIST.get();
+    const menu_list = await this.menus.getMenuList();
 
-    return { type_list };
+    return { type_list, menu_list };
   }
 
   /**
@@ -109,5 +110,25 @@ export class HomepagesRepository extends Repository<
     );
 
     return { ...homepage, home_details: homeDetails };
+  }
+
+  /**
+   * @description Get homepages by language
+   * @param language_id
+   * @returns HomepagesDto[]
+   */
+  async getByLanguage(language_id: number): Promise<HomepagesDto[]> {
+    const condition = {
+      where: { language_id },
+      orderBy: { order: 'asc' },
+      select: {
+        menu_id: true,
+        type: true,
+        home_details: true,
+        menu: { select: { contents: true } },
+      },
+    };
+
+    return await super.findAll(condition);
   }
 }

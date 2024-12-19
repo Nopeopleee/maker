@@ -18,14 +18,16 @@ export class HomeService {
 
   async getMenu(lang: string): Promise<any> {
     const language = await this.languages.findByCode(lang);
-    const menus = await this.menus.getMenusByLanguage(language.id);
+    const menus = await this.menus.getByLanguage(language.id);
 
     return menus;
   }
 
   async getHome(lang: string): Promise<any> {
-    // const homepage = await this.homepages.getHomeByLanguage(lang);
-    // return homepage;
+    const language = await this.languages.findByCode(lang);
+    const homepages = await this.homepages.getByLanguage(language.id);
+
+    return homepages;
   }
 
   async getWebsiteSettings(): Promise<any> {

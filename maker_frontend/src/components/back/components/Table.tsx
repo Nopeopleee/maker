@@ -213,12 +213,7 @@ const MyTable = () => {
                   />
                 </TableCell>
                 <TableCell padding="checkbox">{index + 1}</TableCell>
-                {columns?.map((column) =>
-                  // <TableCell key={column.id}>
-                  //   {row[column.id as keyof typeof row]}
-                  // </TableCell>
-                  renderRow(column, row)
-                )}
+                {columns?.map((column) => renderRow(column, row))}
               </CustomTableRow>
             ))
           ) : (

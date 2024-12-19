@@ -18,7 +18,9 @@ import TextEditor from "@/components/back/components/editor/TextEditor";
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
 
-const ContentForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
+const ContentForm = (props: MenuFormProps) => {
+  const { itemDetail, handleChange, options } = props;
+
   const { menu_list = [] } = options || {};
 
   return (

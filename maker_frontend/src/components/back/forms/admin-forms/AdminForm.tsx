@@ -11,7 +11,9 @@ import Grid from "@mui/material/Grid2";
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
 
-const AdminForm = ({ itemDetail, handleChange }: MenuFormProps) => {
+const AdminForm = (props: MenuFormProps) => {
+  const { itemDetail, handleChange } = props;
+
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, sm: 12 }}>

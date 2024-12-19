@@ -12,7 +12,9 @@ import Grid from "@mui/material/Grid2";
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
 
-const MenuForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
+const MenuForm = (props: MenuFormProps) => {
+  const { itemDetail, handleChange, options } = props;
+
   const { type_list = [] } = options || {};
 
   return (

@@ -108,7 +108,7 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
    * @param language_id
    * @returns MenusDto[]
    */
-  async getMenusByLanguage(language_id: number): Promise<MenusDto[]> {
+  async getByLanguage(language_id: number): Promise<MenusDto[]> {
     const condition = {
       where: { language_id },
       orderBy: { order: 'asc' },

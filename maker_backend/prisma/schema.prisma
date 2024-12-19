@@ -78,30 +78,34 @@ model user_permissions {
 }
 
 model menus {
-  id             Int        @id @default(autoincrement())
-  language       languages? @relation(fields: [language_id], references: [id], onDelete: Cascade)
-  language_id    Int?       @default(1)
+  id             Int         @id @default(autoincrement())
+  language       languages?  @relation(fields: [language_id], references: [id], onDelete: Cascade)
+  language_id    Int?        @default(1)
   parent_menu_id Int?
-  parent_menu    menus?     @relation("ParentChild", fields: [parent_menu_id], references: [id], onDelete: Cascade)
-  child_menus    menus[]    @relation("ParentChild")
-  alias          String     @unique
+  parent_menu    menus?      @relation("ParentChild", fields: [parent_menu_id], references: [id], onDelete: Cascade)
+  child_menus    menus[]     @relation("ParentChild")
+  alias          String      @unique
   title          String
   link           String?
   image          String?
-  type           Int        @db.UnsignedTinyInt
-  level          Int        @default(0)
-  order          Int        @default(0)
-  status         Boolean    @default(true)
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
-  content        contents[]
+  type           Int         @db.UnsignedTinyInt
+  level          Int         @default(0)
+  order          Int         @default(0)
+  status         Boolean     @default(true)
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  contents       contents[]
+  homepage       homepages[]
 }
 
 model homepages {
   id           Int           @id @default(autoincrement())
   language     languages?    @relation(fields: [language_id], references: [id], onDelete: SetNull)
   language_id  Int?          @default(1)
+  menu         menus?        @relation(fields: [menu_id], references: [id], onDelete: SetNull)
+  menu_id      Int?
   type         Int           @db.UnsignedTinyInt
+  order        Int           @default(0)
   status       Boolean       @default(true)
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
@@ -114,10 +118,22 @@ model home_details {
   homepage_id Int       @unique
   type        Int       @db.UnsignedTinyInt
   title       String?
-  content     String?   @db.Text
-  image       String?
-  image_alt   String?
-  link        String?
+  subtitle    String?
+  content_1   String?   @db.Text
+  content_2   String?   @db.Text
+  content_3   String?   @db.Text
+  content_4   String?   @db.Text
+  content_5   String?   @db.Text
+  image_1     String?
+  image_2     String?
+  image_3     String?
+  image_4     String?
+  image_5     String?
+  link_1      String?
+  link_2      String?
+  link_3      String?
+  link_4      String?
+  link_5      String?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
 }

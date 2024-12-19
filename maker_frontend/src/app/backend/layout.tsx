@@ -40,7 +40,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
               <ClientRouterProvider />
               <AlertMessage>{children}</AlertMessage>
             </ThemeProvider>
-            <iframe
+            {/* <iframe
               src="http://127.0.0.1:5000"
               width="300"
               height="400"
@@ -50,7 +50,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
                 bottom: -20,
                 right: 0,
               }}
-            ></iframe>
+            ></iframe> */}
           </AppRouterCacheProvider>
         </body>
       </html>

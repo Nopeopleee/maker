@@ -1,5 +1,5 @@
 // React
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
 // MUI
 import { Box, Button, List, ListItem, Typography } from "@mui/material";

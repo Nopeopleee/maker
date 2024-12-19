@@ -12,9 +12,37 @@ import Grid from "@mui/material/Grid2";
 
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
+import BannerForm from "./BannerForm";
+import ContentForm from "./ContentForm";
+import IntroForm from "./IntroForm";
 
-const HomepageForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
+const HomepageForm = (props: MenuFormProps) => {
+  const { itemDetail, handleChange, options } = props;
+
   const { type_list = [] } = options || {};
+
+  const renderForm = () => {
+    switch (Number(itemDetail?.type)) {
+      case 1:
+        return (
+          <BannerForm itemDetail={itemDetail} handleChange={handleChange} />
+        );
+      case 2:
+        return (
+          <ContentForm
+            itemDetail={itemDetail}
+            handleChange={handleChange}
+            options={options}
+          />
+        );
+      case 3:
+        return (
+          <IntroForm itemDetail={itemDetail} handleChange={handleChange} />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Grid container spacing={2}>
@@ -52,45 +80,7 @@ const HomepageForm = ({ itemDetail, handleChange, options }: MenuFormProps) => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="標題"
-                  required
-                  variant="outlined"
-                  value={itemDetail?.home_details?.title || ""}
-                  onChange={(e) =>
-                    handleChange("home_details.title", e.target.value)
-                  }
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="圖片"
-                  required
-                  variant="outlined"
-                  value={itemDetail?.home_details?.image || ""}
-                  onChange={(e) =>
-                    handleChange("home_details.image", e.target.value)
-                  }
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="圖片 ALT"
-                  required
-                  variant="outlined"
-                  value={itemDetail?.home_details?.image_alt || ""}
-                  onChange={(e) =>
-                    handleChange("home_details.image_alt", e.target.value)
-                  }
-                />
-              </Grid>
+              {renderForm()}
             </Grid>
           </CardContent>
         </Card>

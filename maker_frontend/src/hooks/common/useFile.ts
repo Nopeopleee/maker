@@ -1,6 +1,9 @@
 // React
 import { useEffect, useState } from "react";
 
+// Next.js
+import { useSearchParams } from "next/navigation";
+
 // Redux
 import { useSelector, useDispatch } from "@/redux/store";
 import {
@@ -15,6 +18,8 @@ import { FileItem } from "@/components/back/components/file-manager/interface";
 
 const useFile = () => {
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
 
   // State
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
@@ -37,6 +42,16 @@ const useFile = () => {
   const handleDoubleClick = (event: React.MouseEvent, file: FileItem) => {
     if (file.isDir) {
       dispatch(addFolderChain({ name: file.name, isRoot: false }));
+    } else if (mode === "select") {
+      window.opener.postMessage(
+        {
+          type: "file-browser",
+          filename: file.name,
+          path: `${encodeURIComponent(currentPath)}%2F${file.name}`,
+        },
+        window.location.origin
+      );
+      window.close();
     }
   };
 

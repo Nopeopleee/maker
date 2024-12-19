@@ -14,8 +14,21 @@ export class HomepagesCreateDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
+  @IsOptional()
+  @Type(() => Number)
+  menu_id?: number;
+
+  @Expose()
+  @ApiProperty({ example: 1 })
+  @IsInt()
   @Type(() => Number)
   type: number;
+
+  @Expose()
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @Type(() => Number)
+  order: number;
 
   @Expose()
   @ApiProperty({ example: true })
