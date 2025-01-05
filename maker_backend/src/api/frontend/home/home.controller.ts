@@ -12,13 +12,7 @@ import { HomeService } from './home.service';
 import { LoggerService } from 'src/common/features/logger/logger.service';
 
 // Swagger
-import {
-  ApiExcludeEndpoint,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // Dto
 import { HomepagesCreateDto } from 'src/api/backend/homepages/dto/homepages-create.dto';

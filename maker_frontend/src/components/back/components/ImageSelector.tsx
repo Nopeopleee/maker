@@ -12,15 +12,14 @@ import {
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
+import Helper from "@/lib/helper";
 
 interface ImageSelectorProps {
-  value?: string;
+  value: string;
   column: string;
   label?: string;
   onChange?: (key: string, value: string | number | boolean) => void;
 }
-
-const FILE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/file-service`;
 
 const ImageSelector = ({
   value,
@@ -32,7 +31,7 @@ const ImageSelector = ({
   const [openPreview, setOpenPreview] = useState(false);
 
   useEffect(() => {
-    setPreviewUrl(value ? `${FILE_URL}/${value}` : "");
+    setPreviewUrl(Helper.getFilePath(value));
   }, [value]);
 
   const handleOpenFileManager = () => {
@@ -49,7 +48,7 @@ const ImageSelector = ({
           event.origin === window.location.origin &&
           event.data.type === "file-browser"
         ) {
-          setPreviewUrl(`${FILE_URL}/${event.data.path}`);
+          setPreviewUrl(Helper.getFilePath(event.data.path));
           onChange?.(column, event.data.path);
           window.removeEventListener("message", handleMessage);
         }

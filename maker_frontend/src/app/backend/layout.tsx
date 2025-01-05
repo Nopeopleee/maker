@@ -1,6 +1,9 @@
 // React
 import React from "react";
 
+// Styles
+import "../globals.css";
+
 // Next.js
 import { Metadata } from "next";
 

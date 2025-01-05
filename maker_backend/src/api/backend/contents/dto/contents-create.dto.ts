@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import { ContentDetailsCreateDto } from './content-details-create.dto';
 
 export class ContentsCreateDto {
   @Expose()
@@ -28,6 +29,24 @@ export class ContentsCreateDto {
   title: string;
 
   @Expose()
+  @ApiProperty({ example: 'subtitle' })
+  @IsString()
+  @IsOptional()
+  subtitle: string;
+
+  @Expose()
+  @ApiProperty({ example: 'description' })
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @Expose()
+  @ApiProperty({ example: 'image' })
+  @IsString()
+  @IsOptional()
+  image: string;
+
+  @Expose()
   @ApiProperty({ example: 'text' })
   @IsString()
   text: string;
@@ -40,7 +59,6 @@ export class ContentsCreateDto {
   status: boolean;
 
   @Expose()
-  @ApiProperty({ example: ContentsCreateDto })
-  @Type(() => ContentsCreateDto)
-  content_details: ContentsCreateDto;
+  @ApiProperty({ type: [ContentDetailsCreateDto] })
+  content_details: ContentDetailsCreateDto[];
 }

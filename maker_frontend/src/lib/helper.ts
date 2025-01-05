@@ -51,6 +51,16 @@ const Helper = {
     const i = Math.floor(Math.log(size) / Math.log(k));
     return parseFloat((size / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   },
+
+  /**
+   * @description 返回檔案路徑
+   * @param path
+   * @returns {string}
+   */
+  getFilePath: (path: string | null): string => {
+    if (!path) return "";
+    return `${process.env.NEXT_PUBLIC_API_URL}/api/v1/file-service/${path}`;
+  },
 };
 
 export default Helper;

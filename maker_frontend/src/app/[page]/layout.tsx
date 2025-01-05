@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 // Styles
 import "../globals.css";
+import "react-quill/dist/quill.snow.css";
 
 // Fonts
 import "@fontsource/roboto/300.css";
@@ -49,7 +50,7 @@ export default function RootLayout({
               <ProgressBar>
                 <CssBaseline />
                 <Navbar />
-                <main style={{ flex: 1 }}>{children}</main>
+                <main style={{ flex: 1, minHeight: "75vh" }}>{children}</main>
                 <Footer />
               </ProgressBar>
             </ThemeProvider>

@@ -16,15 +16,16 @@ export default function Banner(props: BannerProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: { xs: `calc(50vh - 68px)`, md: `calc(40vh - 68px)` },
+        height: { xs: `calc(30vh - 68px)`, md: `calc(40vh - 68px)` },
         width: "100%",
         position: "relative",
       }}
     >
       <Image
         src={props.image}
-        alt="placeholder"
+        alt={props.title}
         fill
+        priority
         style={{ objectFit: "cover" }}
       />
       {/* 遮罩 */}

@@ -8,13 +8,13 @@ export class QueryDto {
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  page = 1;
+  page: number;
 
   @ApiPropertyOptional({ example: 15 })
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  limit = 15;
+  limit: number;
 
   @ApiPropertyOptional({ example: 'keyword' })
   @IsOptional()

@@ -17,6 +17,7 @@ import TextEditor from "@/components/back/components/editor/TextEditor";
 
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
+import ImageSelector from "../../components/ImageSelector";
 
 const ContentForm = (props: MenuFormProps) => {
   const { itemDetail, handleChange, options } = props;
@@ -85,13 +86,30 @@ const ContentForm = (props: MenuFormProps) => {
                 <TextField
                   size="small"
                   fullWidth
-                  label="圖片 ALT"
-                  required
+                  label="副標題"
                   variant="outlined"
-                  value={itemDetail?.home_details?.image_alt || ""}
-                  onChange={(e) =>
-                    handleChange("home_details.image_alt", e.target.value)
-                  }
+                  value={itemDetail?.subtitle || ""}
+                  onChange={(e) => handleChange("subtitle", e.target.value)}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <ImageSelector
+                  value={(itemDetail?.image as string) || ""}
+                  column="image"
+                  label="封面圖片"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  label="簡介"
+                  variant="outlined"
+                  multiline
+                  maxRows={8}
+                  value={itemDetail?.description || ""}
+                  onChange={(e) => handleChange("description", e.target.value)}
                 />
               </Grid>
               <Grid size={{ xs: 12, sm: 12 }}>

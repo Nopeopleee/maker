@@ -32,6 +32,12 @@ export class MenusCreateDto {
   link?: string;
 
   @Expose()
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ example: 'image' })
+  image?: string;
+
+  @Expose()
   @IsInt()
   @ApiProperty({ example: 1 })
   @Type(() => Number)

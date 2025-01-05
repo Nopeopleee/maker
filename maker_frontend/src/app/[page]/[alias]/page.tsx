@@ -1,7 +1,7 @@
 "use client";
 
-// Next.js
-import { useParams } from "next/navigation";
+// React
+import { useEffect } from "react";
 
 // Mui
 import { Box } from "@mui/material";
@@ -9,34 +9,48 @@ import { Box } from "@mui/material";
 // Components
 import Banner from "@/components/front/pages/Banner";
 import AlbumInner from "@/components/front/pages/AlbumInner";
-import NotFound from "@/components/error/404";
 import ActivityInner from "@/components/front/pages/ActivityInner";
+import NewsInner from "@/components/front/pages/NewsInner";
+
+// Hooks
+import useHome from "@/hooks/front/useHome";
+import useContent from "@/hooks/front/useContent";
+
+// Lib
+import Helper from "@/lib/helper";
 
 const InnerPage = () => {
-  const params = useParams();
-  const { page, alias } = params;
-  const validPages = ["activity", "album"];
+  const validPages = [3, 4, 5];
 
-  const renderPage = (page: string, alias: string) => {
-    switch (page) {
-      case "activity":
+  const { currentMenu } = useHome();
+  const { handleFetchContent } = useContent();
+
+  useEffect(() => {
+    handleFetchContent();
+  }, []);
+
+  const renderPage = () => {
+    switch (currentMenu.type) {
+      case 3:
+        return <NewsInner />;
+      case 4:
         return <ActivityInner />;
-      case "album":
+      case 5:
         return <AlbumInner />;
       default:
-        return <NotFound />;
+        return null;
     }
   };
 
   return (
     <Box pb={4}>
-      {validPages.includes(page as string) && (
+      {validPages.includes(currentMenu.type) && (
         <Banner
-          title={alias as string}
-          image={"https://placehold.jp/1920x324.png"}
+          title={currentMenu.title}
+          image={Helper.getFilePath(currentMenu.image)}
         />
       )}
-      {renderPage(page as string, alias as string)}
+      {renderPage()}
     </Box>
   );
 };

@@ -4,7 +4,15 @@ import Image from "next/image";
 // MUI
 import { Box } from "@mui/material";
 
-export default function Banner() {
+// Interface
+import { HomeBanner } from "@/interface/page";
+
+// Lib
+import Helper from "@/lib/helper";
+
+export default function Banner(props: HomeBanner) {
+  const { image_1, image_2 } = props;
+
   return (
     <Box
       sx={{
@@ -17,10 +25,11 @@ export default function Banner() {
       }}
     >
       <Image
-        src="https://placehold.jp/1920x540.png"
+        src={Helper.getFilePath(image_1)}
         alt="placeholder"
         fill
         style={{ objectFit: "cover" }}
+        priority
       />
       {/* 遮罩 */}
       <Box
@@ -42,11 +51,12 @@ export default function Banner() {
         }}
       >
         <Image
-          src="/assets/images/title_white.png"
+          src={Helper.getFilePath(image_2)}
           alt="為創而做 Maker"
           width={645}
           height={205}
-          style={{ objectFit: "contain" }}
+          style={{ width: "645px", height: "205px", objectFit: "cover" }}
+          priority
         />
       </Box>
     </Box>

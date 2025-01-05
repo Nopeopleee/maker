@@ -13,6 +13,7 @@ import { ContentsCreateDto } from 'src/api/backend/contents/dto/contents-create.
 import { HelperService } from 'src/common/features/helper/helper.service';
 import MenuTypeEnum from 'src/common/enums/menu-type.enum';
 import { plainToInstance } from 'class-transformer';
+import { ContentsDto } from 'src/api/backend/contents/dto/contents.dto';
 
 @Injectable()
 export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
@@ -115,6 +116,7 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
       select: {
         title: true,
         alias: true,
+        image: true,
         type: true,
       },
     };
@@ -145,29 +147,22 @@ export class MenusRepository extends Repository<MenusDto, MenusCreateDto> {
    * @param menu_alias
    * @returns CmsContentsDto
    */
-  async getArticles(menu_alias: string): Promise<ContentsCreateDto> {
+  async getArticles(menu_alias: string): Promise<ContentsDto[]> {
     const include = {
-      cms_contents: {
-        include: {
-          cms_content_details: {
-            orderBy: { order: 'asc' },
-          },
+      contents: {
+        where: { status: true },
+        select: {
+          title: true,
+          subtitle: true,
+          description: true,
+          alias: true,
+          image: true,
         },
       },
     };
 
     const menu = (await super.findOne({ alias: menu_alias }, include)) as any;
 
-    if (!menu) return {} as ContentsCreateDto;
-
-    menu.cms_contents[0] = plainToInstance(
-      ContentsCreateDto,
-      menu.cms_contents[0],
-      {
-        excludeExtraneousValues: true,
-      },
-    );
-
-    return menu.cms_contents[0];
+    return menu.contents;
   }
 }

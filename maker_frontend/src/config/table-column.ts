@@ -58,6 +58,14 @@ const TableColumns = {
       link: true,
     },
     {
+      id: "menu_id",
+      label: "所屬選單",
+    },
+    {
+      id: "status",
+      label: "狀態",
+    },
+    {
       id: "created_at",
       label: "建立時間",
     },

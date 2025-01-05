@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useEffect } from "react";
 
 // Next.js
 import { useRouter } from "next/navigation";
@@ -13,8 +13,12 @@ import {
   CardContent,
   CardMedia,
   Button,
+  CardActions,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import useContent from "@/hooks/front/useContent";
+import Helper from "@/lib/helper";
+import Image from "next/image";
 
 const activities = [
   {
@@ -51,61 +55,98 @@ const activities = [
   },
 ];
 
-const Activity = () => {
+const ContentList = () => {
   const router = useRouter();
+  const { page, contents, handleFetchContentList } = useContent();
+
+  useEffect(() => {
+    handleFetchContentList();
+  }, []);
 
   const handleGoDetail = (alias: string) => {
-    router.push(`/activity/${alias}`);
+    router.push(`/${page}/${alias}`);
   };
 
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
       <Grid container spacing={4}>
-        {activities.map((activity, index) => (
+        {contents.map((content, index) => (
           <Grid size={12} key={index}>
             <Card sx={{ display: "flex" }}>
-              <CardMedia
-                component="img"
-                sx={{ width: 300 }}
-                image={activity.image}
-                alt={activity.name}
-              />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Box sx={{ width: 300, height: 230 }}>
+                <Image
+                  src={Helper.getFilePath(content.image)}
+                  alt={content.title}
+                  width={300}
+                  height={230}
+                  priority
+                  unoptimized
+                  style={{
+                    width: "300px",
+                    height: "230px",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    {activity.name}
+                    {content.title}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     gutterBottom
                   >
-                    日期：{activity.date}
+                    {content.subtitle}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     gutterBottom
+                    sx={{
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3, // 顯示三行，超出部分省略
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
                   >
-                    {activity.description}
+                    {content.description?.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
                   </Typography>
-                  <Box
-                    sx={{ display: "flex", justifyContent: "flex-end", px: 2 }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleGoDetail(activity.alias)}
-                    >
-                      <Typography
-                        variant="button"
-                        sx={{ textTransform: "none", color: "white" }}
-                      >
-                        查看詳情
-                      </Typography>
-                    </Button>
-                  </Box>
                 </CardContent>
+                <CardActions
+                  sx={{
+                    mt: "auto",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    padding: 2,
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleGoDetail(content.alias)}
+                  >
+                    <Typography
+                      variant="button"
+                      sx={{ textTransform: "none", color: "white" }}
+                    >
+                      查看詳情
+                    </Typography>
+                  </Button>
+                </CardActions>
               </Box>
             </Card>
           </Grid>
@@ -115,4 +156,4 @@ const Activity = () => {
   );
 };
 
-export default Activity;
+export default ContentList;

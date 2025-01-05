@@ -43,6 +43,11 @@ export class ContentDetailsDto {
   @Expose()
   link?: string;
 
+  @ApiProperty({ required: false, example: 0 })
+  @IsString()
+  @Expose()
+  order?: number;
+
   @ApiProperty({ example: new Date() })
   @IsDate()
   @Type(() => Date)

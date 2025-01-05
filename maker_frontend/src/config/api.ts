@@ -1,5 +1,11 @@
+import { initLanguage } from "./page";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const v1Prefix = "api/v1/backend";
+const isClient = typeof window !== "undefined";
+const language = isClient
+  ? localStorage.getItem("language") || initLanguage
+  : initLanguage;
 
 interface ApiWithOptions {
   backend: {
@@ -68,7 +74,12 @@ const Api = {
   },
   frontend: {
     home: {
-      menu: `${BASE_URL}/api/v1/frontend/home/zh-TW/menu`,
+      menu: `${BASE_URL}/api/v1/frontend/home/${language}/menu`,
+      homepage: `${BASE_URL}/api/v1/frontend/home/${language}/home`,
+    },
+    content: {
+      list: `${BASE_URL}/api/v1/frontend/contents/list`,
+      inner: `${BASE_URL}/api/v1/frontend/contents/inner`,
     },
   },
 };

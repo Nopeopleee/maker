@@ -1,9 +1,5 @@
 @import "@fontsource/roboto";
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
 :root {
   --primary: #c7b299;
 }
@@ -15,4 +11,17 @@
 
 .red-text {
   color: #b22222;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #818181;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }

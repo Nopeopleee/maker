@@ -6,5 +6,6 @@ export function getToken(): string | null {
 
 export function removeToken(): void {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
   redirectToSignIn();
 }

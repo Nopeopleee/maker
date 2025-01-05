@@ -16,11 +16,15 @@ import {
   Checkbox,
   styled,
   Link,
+  Button,
 } from "@mui/material";
 
 // Redux
 import { useSelector, useDispatch } from "@/redux/store";
 import { tableSlice } from "@/redux/slices/back/tableSlice";
+
+// Components
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 // Config
 import TableColumns from "@/config/table-column";
@@ -145,21 +149,49 @@ const MyTable = () => {
       value = value[key];
     });
 
-    return (
-      <TableCell key={column.id}>
-        {column.link ? (
-          <Link
-            underline="hover"
-            sx={{ cursor: "pointer" }}
-            onClick={() => handleGoToEdit(row.id)}
-          >
-            <Typography variant="body2">{value}</Typography>
-          </Link>
-        ) : (
-          <Typography variant="body2">{value}</Typography>
-        )}
-      </TableCell>
-    );
+    switch (column.id) {
+      case "status":
+        return (
+          <TableCell key={column.id}>
+            <Button size="small">
+              <Typography
+                variant="button"
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                {value ? (
+                  <Icon
+                    icon="material-symbols:check"
+                    color="#4caf50"
+                    fontSize={20}
+                  />
+                ) : (
+                  <Icon
+                    icon="material-symbols:close"
+                    color="#f44336"
+                    fontSize={20}
+                  />
+                )}
+              </Typography>
+            </Button>
+          </TableCell>
+        );
+      default:
+        return (
+          <TableCell key={column.id}>
+            {column.link ? (
+              <Link
+                underline="hover"
+                sx={{ cursor: "pointer" }}
+                onClick={() => handleGoToEdit(row.id)}
+              >
+                <Typography variant="body2">{value}</Typography>
+              </Link>
+            ) : (
+              <Typography variant="body2">{value}</Typography>
+            )}
+          </TableCell>
+        );
+    }
   };
 
   return (

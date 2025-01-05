@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Next.js
 import Image from "next/image";
@@ -19,27 +19,30 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
+// Config
+import { initPage } from "@/config/page";
+
 // Hooks
 import useHome from "@/hooks/front/useHome";
 
-const pages = [
-  { name: "關於我們", path: "about" },
-  { name: "最新消息", path: "news" },
-  { name: "活動報名", path: "activity" },
-  { name: "活動相簿", path: "album" },
-  { name: "聯絡我們", path: "contact" },
-];
+// Interface
+import { MenuItem as MenuItemInterface } from "@/interface/redux";
 
 function Navbar() {
-  const { menus } = useHome();
+  const { menus, handleFetchMenu, handleChangeMenu } = useHome();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    handleFetchMenu();
+  }, []);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (menu: MenuItemInterface) => {
+    handleChangeMenu(menu);
     setAnchorElNav(null);
   };
 
@@ -57,7 +60,7 @@ function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            <Link href={"/"}>
+            <Link href={"/"} onClick={() => handleChangeMenu(initPage)}>
               <Image
                 src="/assets/images/logo.png"
                 alt="Logo"
@@ -65,21 +68,23 @@ function Navbar() {
                 height={32}
               />
             </Link>
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr: 2,
-                ml: 2,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
+            <Link
+              href={"/"}
+              onClick={() => handleChangeMenu(initPage)}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              <Link href={"/"}>為創而做Maker</Link>
-            </Typography>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  mr: 2,
+                  ml: 2,
+                  fontWeight: 700,
+                }}
+              >
+                為創而做Maker
+              </Typography>
+            </Link>
           </Box>
           <Box
             sx={{
@@ -89,8 +94,15 @@ function Navbar() {
             }}
           >
             {menus.map((menu) => (
-              <Link key={menu.alias} href={`/${menu.alias}`}>
-                <Button sx={{ my: 2, color: "black", display: "block" }}>
+              <Link
+                key={menu.alias}
+                href={`/${menu.alias}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Button
+                  sx={{ my: 2, color: "black", display: "block" }}
+                  onClick={() => handleChangeMenu(menu)}
+                >
                   <Typography sx={{ fontWeight: 700 }}>{menu.title}</Typography>
                 </Button>
               </Link>
@@ -126,8 +138,14 @@ function Navbar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {menus.map((menu) => (
-                <MenuItem key={menu.alias} onClick={handleCloseNavMenu}>
-                  <Link href={`/${menu.alias}`}>
+                <MenuItem
+                  key={menu.alias}
+                  onClick={() => handleCloseNavMenu(menu)}
+                >
+                  <Link
+                    href={`/${menu.alias}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <Typography sx={{ fontWeight: 700 }}>
                       {menu.title}
                     </Typography>

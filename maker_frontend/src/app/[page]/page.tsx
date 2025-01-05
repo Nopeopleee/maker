@@ -1,35 +1,40 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 // MUI
 import { Box } from "@mui/material";
 
 // Components
 import Banner from "@/components/front/pages/Banner";
 import About from "@/components/front/pages/About";
-import Activity from "@/components/front/pages/Activity";
+import ContentList from "@/components/front/pages/ContentList";
 import Album from "@/components/front/pages/Album";
 import Contact from "@/components/front/pages/Contact";
 import NotFound from "@/components/error/404";
 import Home from "@/components/front/home/home";
 
-export default function FrontPage() {
-  const params = useParams();
-  const { page } = params;
-  const validPages = ["about", "activity", "album", "contact"];
+// Hooks
+import useHome from "@/hooks/front/useHome";
 
-  const renderPage = (page: string) => {
-    switch (page) {
-      case "home":
+// Lib
+import Helper from "@/lib/helper";
+
+export default function FrontPage() {
+  const validPages = [2, 3, 4, 5, 6];
+
+  const { currentMenu } = useHome();
+
+  const renderPage = () => {
+    switch (currentMenu.type) {
+      case 1:
         return <Home />;
-      case "about":
+      case 2:
         return <About />;
-      case "activity":
-        return <Activity />;
-      case "album":
+      case 3:
+      case 4:
+        return <ContentList />;
+      case 5:
         return <Album />;
-      case "contact":
+      case 6:
         return <Contact />;
       default:
         return <NotFound />;
@@ -38,13 +43,13 @@ export default function FrontPage() {
 
   return (
     <Box>
-      {validPages.includes(page as string) && (
+      {validPages.includes(currentMenu.type) && (
         <Banner
-          title={page as string}
-          image={"https://placehold.jp/1920x324.png"}
+          title={currentMenu.title}
+          image={Helper.getFilePath(currentMenu.image)}
         />
       )}
-      {renderPage(page as string)}
+      {renderPage()}
     </Box>
   );
 }

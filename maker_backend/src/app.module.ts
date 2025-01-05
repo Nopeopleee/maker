@@ -24,8 +24,6 @@ import { HelperModule } from './common/features/helper/helper.module';
 import { RepositoryModule } from './common/repository/repository.module';
 import { BlackListService } from './common/features/black-list/black-list.service';
 import { BlackListModule } from './common/features/black-list/black-list.module';
-import { UsersModule } from './api/backend/users/users.module';
-import { ContentsModule } from './api/backend/contents/contents.module';
 
 @Module({
   imports: [
@@ -70,8 +68,6 @@ import { ContentsModule } from './api/backend/contents/contents.module';
     HelperModule,
     RepositoryModule,
     BlackListModule,
-    UsersModule,
-    ContentsModule,
   ],
   controllers: [AppController],
   providers: [

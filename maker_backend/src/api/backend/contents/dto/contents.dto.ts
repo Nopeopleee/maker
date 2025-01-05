@@ -27,6 +27,18 @@ export class ContentsDto {
   @IsString()
   title: string;
 
+  @ApiProperty({ example: 'subtitle' })
+  @IsString()
+  subtitle: string;
+
+  @ApiProperty({ example: 'description' })
+  @IsString()
+  description: string;
+
+  @ApiProperty({ example: 'image' })
+  @IsString()
+  image: string;
+
   @ApiProperty({ example: 'text' })
   @IsString()
   text: string;
@@ -46,7 +58,6 @@ export class ContentsDto {
   @Type(() => Date)
   updated_at: Date;
 
-  @ApiProperty({ example: ContentDetailsDto })
-  @Type(() => ContentDetailsDto)
-  content_details: ContentDetailsDto;
+  @ApiProperty({ type: [ContentDetailsDto] })
+  content_details: ContentDetailsDto[];
 }

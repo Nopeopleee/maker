@@ -139,17 +139,20 @@ model home_details {
 }
 
 model contents {
-  id              Int              @id @default(autoincrement())
-  menu            menus            @relation(fields: [menu_id], references: [id], onDelete: Cascade)
+  id              Int               @id @default(autoincrement())
+  menu            menus             @relation(fields: [menu_id], references: [id], onDelete: Cascade)
   menu_id         Int
-  type            Int              @default(1) @db.UnsignedTinyInt
-  alias           String           @unique
+  type            Int               @default(1) @db.UnsignedTinyInt
+  alias           String            @unique
   title           String
-  text            String           @db.Text
-  status          Boolean          @default(true)
-  created_at      DateTime         @default(now())
-  updated_at      DateTime         @updatedAt
-  content_details content_details?
+  subtitle        String?
+  description     String?           @db.Text
+  image           String?
+  text            String            @db.Text
+  status          Boolean           @default(true)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  content_details content_details[]
 }
 
 model content_details {
@@ -162,6 +165,7 @@ model content_details {
   image      String?
   image_alt  String?
   link       String?
+  order      Int      @default(0)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

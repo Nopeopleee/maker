@@ -16,6 +16,7 @@ import { PrismaClient } from '@prisma/client';
 // Dto
 import { ContentsDto } from 'src/api/backend/contents/dto/contents.dto';
 import { ContentsCreateDto } from 'src/api/backend/contents/dto/contents-create.dto';
+import { ContentDetailsCreateDto } from 'src/api/backend/contents/dto/content-details-create.dto';
 
 // Enums
 
@@ -49,7 +50,15 @@ export class ContentsRepository extends Repository<
       OR: ['title'],
     });
 
-    return await super.findByCondition(condition, searchInput);
+    const include = {
+      menu: {
+        select: {
+          title: true,
+        },
+      },
+    };
+
+    return await super.findByCondition(condition, searchInput, include);
   }
 
   /**
@@ -85,13 +94,6 @@ export class ContentsRepository extends Repository<
   async createOrUpdate(data: ContentsCreateDto, id = 0): Promise<ContentsDto> {
     let { content_details, ...restData } = data;
 
-    // home_banners = plainToInstance(HomeBannersCreateDto, home_banners, {
-    //   excludeExtraneousValues: true,
-    // });
-    // home_details = plainToInstance(HomeDetailsCreateDto, home_details, {
-    //   excludeExtraneousValues: true,
-    // });
-
     const content = await prisma.$transaction(
       async (): Promise<ContentsDto> => {
         restData = plainToInstance(ContentsCreateDto, restData, {
@@ -100,25 +102,41 @@ export class ContentsRepository extends Repository<
         if (!restData.alias) restData.alias = this.helper.createAlias();
         const content = await super.createOrUpdate(restData, id);
 
-        // home_banners.homepage_id = homepage.id;
-        // this.homeBannersRepository.createOrUpdate(
-        //   home_banners,
-        //   home_banners.homepage_id,
-        //   false,
-        //   'homepage_id',
-        // );
+        if (content_details && content_details.length > 0) {
+          const contentDetails = content_details.map((item) => {
+            item.content_id = content.id;
+            return plainToInstance(ContentDetailsCreateDto, item, {
+              excludeExtraneousValues: true,
+            });
+          });
 
-        // home_details.homepage_id = homepage.id;
-        // this.homeDetailsRepository.createOrUpdate(
-        //   home_details,
-        //   home_details.homepage_id,
-        //   false,
-        //   'homepage_id',
-        // );
+          await prisma.content_details.deleteMany({
+            where: {
+              content_id: content.id,
+            },
+          });
+
+          await prisma.content_details.createMany({
+            data: contentDetails,
+          });
+        }
 
         return content;
       },
     );
+
+    return content;
+  }
+
+  async getArticleByAlias(alias: string): Promise<any> {
+    const content = await prisma.contents.findFirst({
+      where: {
+        alias,
+      },
+      include: {
+        content_details: true,
+      },
+    });
 
     return content;
   }

@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid2";
 
 // Interfaces
 import type MenuFormProps from "@/interface/menu-form-props";
+import ImageSelector from "../../components/ImageSelector";
 
 const MenuForm = (props: MenuFormProps) => {
   const { itemDetail, handleChange, options } = props;
@@ -73,6 +74,14 @@ const MenuForm = (props: MenuFormProps) => {
                   variant="outlined"
                   value={itemDetail?.alias || ""}
                   onChange={(e) => handleChange("alias", e.target.value)}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <ImageSelector
+                  label="圖片"
+                  column="image"
+                  value={(itemDetail?.image as string) || ""}
+                  onChange={handleChange}
                 />
               </Grid>
             </Grid>

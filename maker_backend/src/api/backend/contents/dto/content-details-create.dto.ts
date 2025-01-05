@@ -37,4 +37,9 @@ export class ContentDetailsCreateDto {
   @IsString()
   @Expose()
   link?: string;
+
+  @ApiProperty({ required: false, example: 0 })
+  @IsString()
+  @Expose()
+  order?: number;
 }

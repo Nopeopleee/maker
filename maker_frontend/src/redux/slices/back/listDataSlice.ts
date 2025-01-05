@@ -48,6 +48,9 @@ const createData = (item: Item) => {
           "YYYY/MM/DD HH:mm"
         );
         break;
+      case "menu_id":
+        item[key] = (item.menu as ReactNode & { title: string })?.title;
+        break;
       default:
         break;
     }

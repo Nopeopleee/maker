@@ -7,7 +7,15 @@ import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
-export default function About() {
+// Interface
+import { HomeAbout } from "@/interface/page";
+
+// Lib
+import Helper from "@/lib/helper";
+
+export default function About(props: HomeAbout) {
+  const { home_details } = props;
+
   return (
     <Box maxWidth="xl" margin="auto">
       <Grid container spacing={2} justifyContent="center">
@@ -18,13 +26,12 @@ export default function About() {
             align="center"
             sx={{ mt: 4, fontWeight: "bold" }}
           >
-            <span className="text-red-600">為創</span>造價值，
-            <span className="text-red-600">而做</span>出改變。
+            {home_details.title}
           </Typography>
         </Grid>
         <Grid size={12}>
           <Typography variant="body1" align="center">
-            這句話是我們的目標；為了創造每一位來學習的學員，所擁有最獨特的價值，我們不斷嘗試著改變。
+            {home_details.subtitle}
           </Typography>
         </Grid>
         <Grid
@@ -39,13 +46,27 @@ export default function About() {
           width={{ xs: "100%", md: "auto" }}
         >
           <Grid size={4} maxWidth={360}>
-            <Image
-              src="https://placehold.jp/360x360.png"
-              alt="Mission"
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
               width={360}
               height={360}
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-            />
+            >
+              <Image
+                src={Helper.getFilePath(home_details.image_1)}
+                alt="Mission"
+                width={360}
+                height={360}
+                priority
+                unoptimized
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
             <Typography
               variant="h6"
               align="center"
@@ -53,20 +74,34 @@ export default function About() {
               color="primary.dark"
               style={{ fontWeight: "bold" }}
             >
-              改變學習環境
+              {home_details.link_1}
             </Typography>
             <Typography variant="body1" align="center">
-              擺脫了考試，我們希望學習的過程不是強迫，而是感受學習的過程，與夥伴一起享受。
+              {home_details.content_1}
             </Typography>
           </Grid>
           <Grid size={4} maxWidth={360}>
-            <Image
-              src="https://placehold.jp/360x360.png"
-              alt="Mission"
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
               width={360}
               height={360}
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-            />
+            >
+              <Image
+                src={Helper.getFilePath(home_details.image_2)}
+                alt="Mission"
+                width={360}
+                height={360}
+                priority
+                unoptimized
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
             <Typography
               variant="h6"
               align="center"
@@ -74,20 +109,34 @@ export default function About() {
               color="primary.dark"
               style={{ fontWeight: "bold" }}
             >
-              改變學習目的
+              {home_details.link_2}
             </Typography>
             <Typography variant="body1" align="center">
-              透過競賽積分等等方式，目的可以是爭取冠軍，也可以是追求成就，共享榮譽，激發學習動力。
+              {home_details.content_2}
             </Typography>
           </Grid>
           <Grid size={4} maxWidth={360}>
-            <Image
-              src="https://placehold.jp/360x360.png"
-              alt="Mission"
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
               width={360}
               height={360}
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-            />
+            >
+              <Image
+                src={Helper.getFilePath(home_details.image_3)}
+                alt="Mission"
+                width={360}
+                height={360}
+                priority
+                unoptimized
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
             <Typography
               variant="h6"
               align="center"
@@ -95,23 +144,37 @@ export default function About() {
               color="primary.dark"
               style={{ fontWeight: "bold" }}
             >
-              改變學習意義
+              {home_details.link_3}
             </Typography>
             <Typography variant="body1" align="center">
-              努力有汗水，學習有挫折，比賽有輸贏，過程有歡樂；只要用心付出，都會成為最美的回憶。
+              {home_details.content_3}
             </Typography>
           </Grid>
         </Grid>
         <Grid size={12} maxWidth={720} mt={4}>
-          <Image
-            src="https://placehold.jp/720x540.png"
-            alt="Mission"
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
             width={720}
             height={540}
-            style={{ width: "100%", height: "auto", objectFit: "cover" }}
-          />
+          >
+            <Image
+              src={Helper.getFilePath(home_details.image_4)}
+              alt="Mission"
+              width={720}
+              height={540}
+              priority
+              unoptimized
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
           <Typography variant="body1" align="center" mt={2} lineHeight={2}>
-            我們也曾經是學生。我們體驗比賽的刺激，承受挫折的洗禮，看見得獎的喜悅，享受學習的過程。我們擁有過最深的感動；然而，為創而做邀請你，創造屬於你與我們的悸動。
+            {home_details.content_4}
           </Typography>
         </Grid>
       </Grid>

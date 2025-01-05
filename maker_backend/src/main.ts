@@ -50,6 +50,14 @@ async function bootstrap() {
       const { version } = (req as Request).params;
       copyDocument.info.version = version;
 
+      // Sort routes
+      const sortedPaths = Object.keys(copyDocument.paths).sort();
+      const sortedPathsObject = {};
+      sortedPaths.forEach((path) => {
+        sortedPathsObject[path] = copyDocument.paths[path];
+      });
+      copyDocument.paths = sortedPathsObject;
+
       for (const route in document.paths) {
         if (route.startsWith(`/api/${version}`)) {
           continue;

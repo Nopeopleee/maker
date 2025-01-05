@@ -19,17 +19,17 @@ export const seedHomepage = async () => {
     update: {
       homepage_id: homepage.id,
       type: 1,
-      title: '首頁大圖',
-      image: 'https://via.placeholder.com/1920x540',
-      image_alt: '首頁大圖',
+      title: '首頁圖',
+      image_1: 'https://via.placeholder.com/1920x540',
+      image_2: 'https://via.placeholder.com/1920x540',
     },
     create: {
       id: 1,
       homepage_id: homepage.id,
       type: 1,
       title: '首頁大圖',
-      image: 'https://via.placeholder.com/1920x540',
-      image_alt: '首頁大圖',
+      image_1: 'https://via.placeholder.com/1920x540',
+      image_2: 'https://via.placeholder.com/1920x540',
     },
   });
 };
