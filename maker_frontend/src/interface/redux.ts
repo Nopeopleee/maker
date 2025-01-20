@@ -38,6 +38,7 @@ interface Content {
   image: string;
   text: string;
   created_at: string;
+  content_details: Content[];
 }
 
 export type { MenuItem, HomeState, Homepage, Content, ContentState };

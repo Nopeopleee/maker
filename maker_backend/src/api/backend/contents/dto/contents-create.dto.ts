@@ -49,6 +49,7 @@ export class ContentsCreateDto {
   @Expose()
   @ApiProperty({ example: 'text' })
   @IsString()
+  @IsOptional()
   text: string;
 
   @Expose()

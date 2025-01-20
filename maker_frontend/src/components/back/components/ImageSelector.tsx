@@ -18,7 +18,12 @@ interface ImageSelectorProps {
   value: string;
   column: string;
   label?: string;
-  onChange?: (key: string, value: string | number | boolean) => void;
+  onChange?: (
+    key: string,
+    value: string | number | boolean,
+    index?: number
+  ) => void;
+  index?: number;
 }
 
 const ImageSelector = ({
@@ -26,6 +31,7 @@ const ImageSelector = ({
   column,
   label,
   onChange,
+  index,
 }: ImageSelectorProps) => {
   const [previewUrl, setPreviewUrl] = useState<string>(value || "");
   const [openPreview, setOpenPreview] = useState(false);
@@ -49,7 +55,7 @@ const ImageSelector = ({
           event.data.type === "file-browser"
         ) {
           setPreviewUrl(Helper.getFilePath(event.data.path));
-          onChange?.(column, event.data.path);
+          onChange?.(column, event.data.path, index);
           window.removeEventListener("message", handleMessage);
         }
       };

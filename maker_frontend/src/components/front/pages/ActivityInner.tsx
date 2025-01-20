@@ -16,36 +16,19 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
-const activity = {
-  name: "活動 1",
-  date: "2023-10-01",
-  description:
-    "這是活動 1 的詳細描述。這個活動將會非常有趣，歡迎大家踴躍參加。",
-  image: "https://placehold.jp/800x400.png",
-};
+// Hooks
+import useContent from "@/hooks/front/useContent";
 
-const card = [
-  {
-    title: "營隊資訊",
-    content: "這是營隊的資訊。",
-  },
-  {
-    title: "報名費用",
-    content: "這是報名費用的資訊。",
-  },
-  {
-    title: "師資陣容",
-    content: "這是師資陣容的資訊。",
-  },
-  {
-    title: "注意事項",
-    content: "這是注意事項的資訊。",
-  },
-];
+// Lib
+import Helper from "@/lib/helper";
 
 const ActivityInner = () => {
   const router = useRouter();
   const pathName = usePathname();
+
+  const { content } = useContent();
+
+  const { content_details = [] } = content;
 
   const handleGoToRegistration = () => {
     router.push(`${pathName}/registration`);
@@ -59,24 +42,32 @@ const ActivityInner = () => {
             <CardMedia
               component="img"
               height="400"
-              image={activity.image}
-              alt={activity.name}
+              image={Helper.getFilePath(content.image)}
+              alt={content.title}
             />
           </Card>
         </Grid>
-        {card.map((item, index) => (
+        <Grid size={12}>
+          <Typography
+            className="ql-editor"
+            component={"div"}
+            dangerouslySetInnerHTML={{ __html: content.text }}
+          />
+        </Grid>
+        {content_details.map((item, index) => (
           <Grid key={index} size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
-                <Typography variant="h5" component="div">
+                <Typography variant="h5" component="div" gutterBottom>
                   {index + 1}
                   {". "}
                   {item.title}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
-                />
+                {Helper.formatTextBreakRow(item.text).map((text, i) => (
+                  <Typography key={i} variant="body1" color="text.secondary">
+                    {text}
+                  </Typography>
+                ))}
               </CardContent>
             </Card>
           </Grid>
@@ -92,13 +83,9 @@ const ActivityInner = () => {
                 fontSize: "1.25rem",
                 borderRadius: "9999px",
               }}
+              onClick={handleGoToRegistration}
             >
-              <Typography
-                variant="h6"
-                color="white"
-                fontWeight={700}
-                onClick={handleGoToRegistration}
-              >
+              <Typography variant="h6" color="white" fontWeight={700}>
                 我要報名
               </Typography>
             </Button>

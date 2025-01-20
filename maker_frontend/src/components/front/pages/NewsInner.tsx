@@ -2,7 +2,14 @@
 import React from "react";
 
 // MUI
-import { Box, Container, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Typography,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 // Hooks
@@ -11,6 +18,8 @@ import Helper from "@/lib/helper";
 
 const NewsInner = () => {
   const { content } = useContent();
+
+  const { content_details = [] } = content;
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -24,7 +33,7 @@ const NewsInner = () => {
                 alignItems: "end",
               }}
             >
-              <Typography variant="h2">{content.title}</Typography>
+              <Typography variant="h3">{content.title}</Typography>
               <Typography variant="caption" color="gray">
                 {Helper.getFormattedDate(
                   content.created_at,
@@ -41,6 +50,22 @@ const NewsInner = () => {
               dangerouslySetInnerHTML={{ __html: content.text }}
             />
           </Grid>
+          {content_details.map((item, index) => (
+            <Grid key={index} size={{ xs: 12, md: 6 }}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" component="div" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  {Helper.formatTextBreakRow(item.text).map((text, i) => (
+                    <Typography key={i} variant="body1" color="text.secondary">
+                      {text}
+                    </Typography>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Grid>
     </Container>

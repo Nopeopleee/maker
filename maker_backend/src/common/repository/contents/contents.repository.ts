@@ -17,6 +17,7 @@ import { PrismaClient } from '@prisma/client';
 import { ContentsDto } from 'src/api/backend/contents/dto/contents.dto';
 import { ContentsCreateDto } from 'src/api/backend/contents/dto/contents-create.dto';
 import { ContentDetailsCreateDto } from 'src/api/backend/contents/dto/content-details-create.dto';
+import { ContentDetailsDto } from 'src/api/backend/contents/dto/content-details.dto';
 
 // Enums
 
@@ -66,7 +67,7 @@ export class ContentsRepository extends Repository<
    * @returns any
    */
   async getOptions(): Promise<any> {
-    const menu_list = await this.menus.getMenuList();
+    const menu_list = await this.menus.findAll();
 
     return { menu_list };
   }
@@ -102,26 +103,30 @@ export class ContentsRepository extends Repository<
         if (!restData.alias) restData.alias = this.helper.createAlias();
         const content = await super.createOrUpdate(restData, id);
 
+        await prisma.content_details.deleteMany({
+          where: {
+            content_id: content.id,
+          },
+        });
+
         if (content_details && content_details.length > 0) {
-          const contentDetails = content_details.map((item) => {
+          const newContentDetails = content_details.map((item) => {
             item.content_id = content.id;
             return plainToInstance(ContentDetailsCreateDto, item, {
               excludeExtraneousValues: true,
             });
           });
 
-          await prisma.content_details.deleteMany({
-            where: {
-              content_id: content.id,
-            },
-          });
-
           await prisma.content_details.createMany({
-            data: contentDetails,
+            data: newContentDetails,
           });
         }
 
-        return content;
+        const include = {
+          content_details: true,
+        };
+
+        return await super.findById(content.id, include);
       },
     );
 

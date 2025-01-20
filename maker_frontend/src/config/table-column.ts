@@ -10,6 +10,10 @@ const TableColumns = {
       label: "Email",
     },
     {
+      id: "status",
+      label: "狀態",
+    },
+    {
       id: "created_at",
       label: "建立時間",
     },
@@ -25,6 +29,10 @@ const TableColumns = {
       label: "帳號",
     },
     {
+      id: "status",
+      label: "狀態",
+    },
+    {
       id: "created_at",
       label: "建立時間",
     },
@@ -36,6 +44,10 @@ const TableColumns = {
       link: true,
     },
     {
+      id: "status",
+      label: "狀態",
+    },
+    {
       id: "created_at",
       label: "建立時間",
     },
@@ -45,6 +57,10 @@ const TableColumns = {
       id: "home_details.title",
       label: "名稱",
       link: true,
+    },
+    {
+      id: "status",
+      label: "狀態",
     },
     {
       id: "created_at",

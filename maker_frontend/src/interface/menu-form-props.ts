@@ -9,10 +9,22 @@ interface Options {
 
 interface MenuFormProps {
   itemDetail: ItemDetail;
-  handleChange: (key: string, value: string | number | boolean) => void;
+  handleChange: (
+    key: string,
+    value: string | number | boolean,
+    index?: number
+  ) => void;
   options?: Options;
 }
 
-export type { ItemDetail, Options };
+interface Add {
+  handleAddItem: (column: string) => void;
+}
+
+interface Remove {
+  handleRemoveItem: (column: string, index: number) => void;
+}
+
+export type { MenuFormProps, ItemDetail, Options, Add, Remove };
 
 export default MenuFormProps;

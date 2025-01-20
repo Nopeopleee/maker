@@ -18,7 +18,7 @@ interface ItemDetail {
 }
 
 interface innerDataState {
-  itemDetail: ItemDetail;
+  itemDetail: ItemDetail | Array<ItemDetail>;
   options: object;
 }
 

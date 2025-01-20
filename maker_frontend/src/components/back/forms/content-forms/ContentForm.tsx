@@ -9,20 +9,51 @@ import {
   Divider,
   Card,
   CardContent,
+  Button,
+  Typography,
+  IconButton,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 // Components
 import TextEditor from "@/components/back/components/editor/TextEditor";
+import ImageSelector from "@/components/back/components/ImageSelector";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 // Interfaces
-import type MenuFormProps from "@/interface/menu-form-props";
-import ImageSelector from "../../components/ImageSelector";
+import type {
+  ItemDetail,
+  MenuFormProps,
+  Add,
+  Remove,
+} from "@/interface/menu-form-props";
+import React from "react";
+import InnerForm from "./InnerForm";
+import AlbumForm from "./AlbumForm";
 
-const ContentForm = (props: MenuFormProps) => {
-  const { itemDetail, handleChange, options } = props;
+const ContentForm = (props: MenuFormProps & Add & Remove) => {
+  const { itemDetail, handleChange, options, handleAddItem, handleRemoveItem } =
+    props;
 
   const { menu_list = [] } = options || {};
+
+  const { content_details = [] } = itemDetail || {};
+
+  const [menuType, setMenuType] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    setMenuType(
+      Number(
+        (
+          menu_list.find(
+            (item) => item.id === itemDetail?.menu_id
+          ) as unknown as {
+            type: number;
+          }
+        )?.type
+      ) || null
+    );
+  }, [menu_list, itemDetail?.menu_id]);
 
   return (
     <Grid container spacing={2}>
@@ -60,64 +91,24 @@ const ContentForm = (props: MenuFormProps) => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="連結"
-                  required
-                  variant="outlined"
-                  value={itemDetail?.alias || ""}
-                  onChange={(e) => handleChange("alias", e.target.value)}
+              {[3, 4].includes(menuType as number) && (
+                <InnerForm
+                  itemDetail={itemDetail}
+                  handleChange={handleChange}
+                  handleAddItem={handleAddItem}
+                  handleRemoveItem={handleRemoveItem}
+                  content_details={content_details as Array<ItemDetail>}
                 />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="標題"
-                  required
-                  variant="outlined"
-                  value={itemDetail?.title || ""}
-                  onChange={(e) => handleChange("title", e.target.value)}
+              )}
+              {[5].includes(menuType as number) && (
+                <AlbumForm
+                  itemDetail={itemDetail}
+                  handleChange={handleChange}
+                  handleAddItem={handleAddItem}
+                  handleRemoveItem={handleRemoveItem}
+                  content_details={content_details as Array<ItemDetail>}
                 />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="副標題"
-                  variant="outlined"
-                  value={itemDetail?.subtitle || ""}
-                  onChange={(e) => handleChange("subtitle", e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <ImageSelector
-                  value={(itemDetail?.image as string) || ""}
-                  column="image"
-                  label="封面圖片"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="簡介"
-                  variant="outlined"
-                  multiline
-                  maxRows={8}
-                  value={itemDetail?.description || ""}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 12 }}>
-                <TextEditor
-                  value={(itemDetail?.text as string) || ""}
-                  setValue={(value) => handleChange("text", value)}
-                />
-              </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>

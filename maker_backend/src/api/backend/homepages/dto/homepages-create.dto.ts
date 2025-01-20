@@ -27,6 +27,7 @@ export class HomepagesCreateDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
+  @IsOptional()
   @Type(() => Number)
   order: number;
 

@@ -17,6 +17,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type Api from "@/config/api";
 import sideNav from "@/config/side-nav";
 
+// Interfaces
+import { ItemDetail } from "@/interface/menu-form-props";
+
 const useInner = (page: keyof typeof Api.backend, action: string) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -78,12 +81,35 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
     router.push(`/backend/${page}`);
   };
 
-  const handleChange = (key: string, value: string | number | boolean) => {
+  const handleChange = (
+    key: string,
+    value: string | number | boolean,
+    index?: number
+  ) => {
     const column = key.split(".");
     if (column.length > 1) {
+      if (index !== undefined) {
+        const child = (itemDetail as ItemDetail)[column[0]] || [];
+        const newChild = (child as Array<ItemDetail>).map((item, i) => {
+          if (i === index) {
+            return { ...item, [column[1]]: value };
+          }
+          return item;
+        });
+
+        dispatch(
+          setItemDetail({
+            ...itemDetail,
+            [column[0]]: newChild,
+          })
+        );
+
+        return;
+      }
+
       const childKey = column.pop() as string;
-      const child = itemDetail[column[0]] || {};
-      const newChild = { ...child, [childKey]: value };
+      const child = (itemDetail as ItemDetail)[column[0]] || {};
+      const newChild = { ...(child as ItemDetail), [childKey]: value };
 
       dispatch(
         setItemDetail({
@@ -96,6 +122,36 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
     }
 
     dispatch(setItemDetail({ ...itemDetail, [key]: value }));
+  };
+
+  const handleAddItem = (column: string) => {
+    const child = (itemDetail as ItemDetail)[column] || [];
+    const newChild = [
+      ...(child as ItemDetail[]),
+      {
+        id: new Date().getTime(),
+        order: (child as Array<ItemDetail>).length + 1,
+      },
+    ];
+
+    dispatch(
+      setItemDetail({
+        ...itemDetail,
+        [column]: newChild,
+      })
+    );
+  };
+
+  const handleRemoveItem = (column: string, index: number) => {
+    const child = (itemDetail as ItemDetail)[column] || [];
+    const newChild = (child as Array<ItemDetail>).filter((_, i) => i !== index);
+
+    dispatch(
+      setItemDetail({
+        ...itemDetail,
+        [column]: newChild,
+      })
+    );
   };
 
   const routerMap = (pathName: string): string | undefined => {
@@ -115,6 +171,8 @@ const useInner = (page: keyof typeof Api.backend, action: string) => {
     handleSaveClose,
     handleCancel,
     handleChange,
+    handleAddItem,
+    handleRemoveItem,
     routerMap,
   };
 };

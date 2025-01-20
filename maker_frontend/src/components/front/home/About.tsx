@@ -61,7 +61,7 @@ export default function About(props: HomeAbout) {
                 priority
                 unoptimized
                 style={{
-                  maxWidth: "100%",
+                  maxWidth: "100vw",
                   maxHeight: "100%",
                   objectFit: "cover",
                 }}
@@ -96,7 +96,7 @@ export default function About(props: HomeAbout) {
                 priority
                 unoptimized
                 style={{
-                  maxWidth: "100%",
+                  maxWidth: "100vw",
                   maxHeight: "100%",
                   objectFit: "cover",
                 }}
@@ -131,7 +131,7 @@ export default function About(props: HomeAbout) {
                 priority
                 unoptimized
                 style={{
-                  maxWidth: "100%",
+                  maxWidth: "100vw",
                   maxHeight: "100%",
                   objectFit: "cover",
                 }}
@@ -167,7 +167,7 @@ export default function About(props: HomeAbout) {
               priority
               unoptimized
               style={{
-                maxWidth: "100%",
+                maxWidth: "100vw",
                 maxHeight: "100%",
                 objectFit: "contain",
               }}

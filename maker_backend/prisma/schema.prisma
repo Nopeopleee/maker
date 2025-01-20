@@ -47,7 +47,7 @@ model audit_logs {
 }
 
 model users {
-  id               Int                @id @default(autoincrement())
+  id               String             @id
   account          String             @unique
   name             String?
   password         String?
@@ -61,7 +61,7 @@ model users {
 model user_logs {
   id         Int      @id @default(autoincrement())
   user       users?   @relation(fields: [user_id], references: [id], onDelete: SetNull)
-  user_id    Int?
+  user_id    String?
   action     String
   message    String
   ip         String
@@ -71,7 +71,7 @@ model user_logs {
 model user_permissions {
   id         Int      @id @default(autoincrement())
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id    Int
+  user_id    String
   path       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -148,7 +148,7 @@ model contents {
   subtitle        String?
   description     String?           @db.Text
   image           String?
-  text            String            @db.Text
+  text            String?           @db.Text
   status          Boolean           @default(true)
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
@@ -158,7 +158,7 @@ model contents {
 model content_details {
   id         Int      @id @default(autoincrement())
   content    contents @relation(fields: [content_id], references: [id], onDelete: Cascade)
-  content_id Int      @unique
+  content_id Int
   type       Int?     @db.UnsignedTinyInt
   title      String?
   text       String?  @db.Text

@@ -58,8 +58,18 @@ const Helper = {
    * @returns {string}
    */
   getFilePath: (path: string | null): string => {
+    const API = process.env.NEXT_PUBLIC_API_URL;
     if (!path) return "";
-    return `${process.env.NEXT_PUBLIC_API_URL}/api/v1/file-service/${path}`;
+    return `${API}/api/v1/file-service/${path}`;
+  },
+
+  /**
+   * @description 格式化文字換行
+   * @param text
+   * @returns {Array<string>}
+   */
+  formatTextBreakRow: (text: string): Array<string> => {
+    return text?.split("\n") || [];
   },
 };
 

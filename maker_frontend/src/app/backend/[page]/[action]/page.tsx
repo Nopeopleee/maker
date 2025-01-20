@@ -41,6 +41,8 @@ const BackPage = () => {
     handleSaveClose,
     handleCancel,
     handleChange,
+    handleAddItem,
+    handleRemoveItem,
     routerMap,
     itemDetail,
     options,
@@ -84,6 +86,8 @@ const BackPage = () => {
             itemDetail={itemDetail as ItemDetail}
             handleChange={handleChange}
             options={options as Options}
+            handleAddItem={handleAddItem}
+            handleRemoveItem={handleRemoveItem}
           />
         );
       default:
