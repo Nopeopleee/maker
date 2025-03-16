@@ -65,6 +65,13 @@ const Api = {
       index: `${BASE_URL}/${v1Prefix}/contents`,
       options: `${BASE_URL}/${v1Prefix}/contents/options`,
     },
+    contacts: {
+      index: `${BASE_URL}/${v1Prefix}/settings/contacts`,
+    },
+    websites: {
+      index: `${BASE_URL}/${v1Prefix}/settings/websites`,
+      options: `${BASE_URL}/${v1Prefix}/settings/websites/options`,
+    },
     files: {
       index: `${BASE_URL}/api/v1/file-service`,
       "create-folder": `${BASE_URL}/api/v1/file-service/create-folder`,
@@ -76,6 +83,8 @@ const Api = {
     home: {
       menu: `${BASE_URL}/api/v1/frontend/home/${language}/menu`,
       homepage: `${BASE_URL}/api/v1/frontend/home/${language}/home`,
+      contact: `${BASE_URL}/api/v1/frontend/home/contact-settings`,
+      website: `${BASE_URL}/api/v1/frontend/home/website-settings`,
     },
     content: {
       list: `${BASE_URL}/api/v1/frontend/contents/list`,

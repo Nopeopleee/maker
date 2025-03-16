@@ -18,22 +18,29 @@ export class SettingService {
   ) {}
 
   /**
+   * Get all website options
+   */
+  async getWebsiteOptions(): Promise<{
+    website_robots: Object;
+    website_title: Object;
+  }> {
+    const website_robots = RobotEnum.LIST.get();
+    const website_title = WebsiteTitleEnum.LIST.get();
+
+    return { website_robots, website_title };
+  }
+
+  /**
    * Get all websites
    */
   async getWebsites(): Promise<{
-    items: Object;
-    website_robots: Object;
-    website_title: Object;
+    [key: string]: string;
   }> {
     const websites = await this.settingRepository.findByType(
       SettingEnum.WEBSITE,
     );
 
-    const websiteObj = this.helper.convertToObject(websites, 'name', 'value');
-    const website_robots = RobotEnum.LIST.get();
-    const website_title = WebsiteTitleEnum.LIST.get();
-
-    return { items: websiteObj, website_robots, website_title };
+    return this.helper.convertToObject(websites, 'name', 'value');
   }
 
   /**
@@ -43,5 +50,25 @@ export class SettingService {
     this.settingRepository.updateSettings(body, SettingEnum.WEBSITE);
 
     return { items: body };
+  }
+
+  /**
+   * Get all contacts
+   */
+  async getContacts(): Promise<{ [key: string]: string }> {
+    const contacts = await this.settingRepository.findByType(
+      SettingEnum.CONTACT,
+    );
+
+    return this.helper.convertToObject(contacts, 'name', 'value');
+  }
+
+  /**
+   * Update contacts
+   */
+  async updateContacts(body: any): Promise<{ items: { [key: string]: any } }> {
+    this.settingRepository.updateSettings(body, SettingEnum.CONTACT);
+
+    return body;
   }
 }

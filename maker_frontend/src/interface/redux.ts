@@ -7,11 +7,17 @@ interface MenuItem {
   type: number;
 }
 
+interface Setting {
+  [key: string]: string;
+}
+
 interface HomeState {
   language: string;
   menus: MenuItem[];
   currentMenu: MenuItem;
   homepage: Array<Homepage>;
+  contact: Setting;
+  website: Setting;
 }
 
 interface Homepage {

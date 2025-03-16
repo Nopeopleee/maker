@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-
 // Nextjs
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 // Redux
 import { useSelector, useDispatch } from "@/redux/store";
 import {
   fetchMenu,
   fetchHomepage,
+  fetchContact,
   frontHomeSlice,
 } from "@/redux/slices/front/homeSlice";
 
@@ -16,10 +15,11 @@ import { MenuItem } from "@/interface/redux";
 
 const useHome = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { page } = useParams();
 
   // Redux State
-  const { menus, currentMenu, homepage } = useSelector(
+  const { menus, currentMenu, homepage, contact } = useSelector(
     (state) => state.frontHome
   );
 
@@ -32,10 +32,15 @@ const useHome = () => {
 
   const handleChangeMenu = (menu: MenuItem) => {
     dispatch(setCurrentMenu(menu));
+    router.push(menu.alias);
   };
 
   const handleFetchHomepage = async () => {
     await dispatch(fetchHomepage());
+  };
+
+  const handleFetchContact = async () => {
+    await dispatch(fetchContact());
   };
 
   return {
@@ -44,11 +49,13 @@ const useHome = () => {
     menus,
     currentMenu,
     homepage,
+    contact,
 
     // Actions
     handleFetchMenu,
     handleChangeMenu,
     handleFetchHomepage,
+    handleFetchContact,
   };
 };
 

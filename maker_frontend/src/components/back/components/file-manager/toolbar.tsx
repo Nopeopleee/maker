@@ -102,7 +102,7 @@ const Toolbar = ({
             ))}
           </Menu>
         </Grid>
-        <Grid>
+        {/* <Grid>
           <Tooltip title="網格顯示" color="inherit">
             <IconButton
               size="small"
@@ -115,8 +115,8 @@ const Toolbar = ({
               />
             </IconButton>
           </Tooltip>
-        </Grid>
-        <Grid>
+        </Grid> */}
+        {/* <Grid>
           <Tooltip title="列表顯示" color="inherit">
             <IconButton
               size="small"
@@ -129,7 +129,7 @@ const Toolbar = ({
               />
             </IconButton>
           </Tooltip>
-        </Grid>
+        </Grid> */}
         <Grid>
           <Tooltip title="選項" color="inherit">
             <Button

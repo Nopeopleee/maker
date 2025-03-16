@@ -15,29 +15,6 @@ import Grid from "@mui/material/Grid2";
 import useContent from "@/hooks/front/useContent";
 import Helper from "@/lib/helper";
 
-const photos = [
-  {
-    src: "https://placehold.jp/800x600.png",
-    title: "照片 1",
-    description: "這是照片 1 的描述。",
-  },
-  {
-    src: "https://placehold.jp/800x600.png",
-    title: "照片 2",
-    description: "這是照片 2 的描述。",
-  },
-  {
-    src: "https://placehold.jp/800x600.png",
-    title: "照片 3",
-    description: "這是照片 3 的描述。",
-  },
-  {
-    src: "https://placehold.jp/800x600.png",
-    title: "照片 4",
-    description: "這是照片 4 的描述。",
-  },
-];
-
 const AlbumInner = () => {
   const { content } = useContent();
 

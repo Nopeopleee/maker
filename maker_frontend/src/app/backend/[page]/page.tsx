@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 // Next.js
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 // Hooks
 import useList from "@/hooks/back/useList";
@@ -25,6 +25,7 @@ import FileManager from "@/components/back/pages/file-manager/file-manager";
 import Dashboard from "@/components/back/pages/dashboard/dashboard";
 
 const BackPage = () => {
+  const router = useRouter();
   const params = useParams();
   const { page } = params;
 
@@ -59,6 +60,10 @@ const BackPage = () => {
         return <Dashboard />;
       case "file-manager":
         return <FileManager />;
+      case "contacts":
+      case "websites":
+        router.push("/backend/dashboard");
+        return null;
       default:
         return <MyTable />;
     }

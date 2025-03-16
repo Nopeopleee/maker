@@ -16,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 // Config
@@ -29,7 +28,7 @@ import useHome from "@/hooks/front/useHome";
 import { MenuItem as MenuItemInterface } from "@/interface/redux";
 
 function Navbar() {
-  const { menus, handleFetchMenu, handleChangeMenu } = useHome();
+  const { menus, currentMenu, handleFetchMenu, handleChangeMenu } = useHome();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -42,7 +41,8 @@ function Navbar() {
   };
 
   const handleCloseNavMenu = (menu: MenuItemInterface) => {
-    handleChangeMenu(menu);
+    console.log("menu", menu);
+    if (menu.alias) handleChangeMenu(menu);
     setAnchorElNav(null);
   };
 
@@ -94,18 +94,40 @@ function Navbar() {
             }}
           >
             {menus.map((menu) => (
-              <Link
+              <Box
                 key={menu.alias}
-                href={`/${menu.alias}`}
-                style={{ textDecoration: "none", color: "inherit" }}
+                sx={{
+                  p: 1,
+                  px: 2,
+                  backgroundColor:
+                    currentMenu.alias === menu.alias
+                      ? "primary.dark"
+                      : "transparent",
+                  "&:hover": {
+                    backgroundColor: "primary.dark",
+                    cursor: "pointer",
+                  },
+                  "&:not(:last-child)": {
+                    borderRight: 1,
+                    borderRightColor: "divider",
+                    borderRightStyle: "solid",
+                  },
+                  color:
+                    currentMenu.alias === menu.alias
+                      ? "primary.light"
+                      : "inherit",
+                }}
+                onClick={() => handleChangeMenu(menu)}
               >
-                <Button
-                  sx={{ my: 2, color: "black", display: "block" }}
-                  onClick={() => handleChangeMenu(menu)}
+                <Typography
+                  sx={{
+                    fontWeight: currentMenu.alias === menu.alias ? 500 : 600,
+                    fontSize: "1.03rem",
+                  }}
                 >
-                  <Typography sx={{ fontWeight: 700 }}>{menu.title}</Typography>
-                </Button>
-              </Link>
+                  {menu.title}
+                </Typography>
+              </Box>
             ))}
           </Box>
 
@@ -142,14 +164,7 @@ function Navbar() {
                   key={menu.alias}
                   onClick={() => handleCloseNavMenu(menu)}
                 >
-                  <Link
-                    href={`/${menu.alias}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <Typography sx={{ fontWeight: 700 }}>
-                      {menu.title}
-                    </Typography>
-                  </Link>
+                  <Typography sx={{ fontWeight: 700 }}>{menu.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>

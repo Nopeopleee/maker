@@ -31,6 +31,8 @@ const initialState: innerDataState = {
 export const fetchOptions = createAsyncThunk(
   "innerData/fetchOptions",
   async (list: keyof typeof Api.backend) => {
+    if (!("options" in Api.backend[list])) return;
+
     const response = await axiosInstance.get(
       `${(Api.backend[list] as { options?: string })?.options}`
     );
@@ -76,9 +78,16 @@ export const editData = createAsyncThunk(
   "innerData/editData",
   async (params: { list: keyof typeof Api.backend; id: number }) => {
     const { list, id } = params;
-    const response = await axiosInstance.get(
-      Api.backend[list].index + `/${id}`
-    );
+
+    let response;
+    switch (list) {
+      case "contacts":
+      case "websites":
+        response = await axiosInstance.get(Api.backend[list].index);
+        break;
+      default:
+        response = await axiosInstance.get(Api.backend[list].index + `/${id}`);
+    }
 
     return response.data;
   }
@@ -97,10 +106,18 @@ export const updateData = createAsyncThunk(
   ) => {
     const { list, id, data } = params;
     try {
-      const response = await axiosInstance.patch(
-        Api.backend[list].index + `/${id}`,
-        data
-      );
+      let response;
+      switch (list) {
+        case "contacts":
+        case "websites":
+          response = await axiosInstance.patch(Api.backend[list].index, data);
+          break;
+        default:
+          response = await axiosInstance.patch(
+            Api.backend[list].index + `/${id}`,
+            data
+          );
+      }
       thunkAPI.dispatch(setMessage("更新成功"));
       thunkAPI.dispatch(setSeverity("success"));
       thunkAPI.dispatch(setOpen(true));

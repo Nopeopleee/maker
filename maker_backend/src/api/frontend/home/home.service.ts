@@ -35,4 +35,10 @@ export class HomeService {
 
     return this.helper.convertToObject(settings, 'name', 'value');
   }
+
+  async getContactSettings(): Promise<any> {
+    const settings = await this.settings.findByType(SettingEnum.CONTACT);
+
+    return this.helper.convertToObject(settings, 'name', 'value');
+  }
 }

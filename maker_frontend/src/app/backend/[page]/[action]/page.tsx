@@ -25,10 +25,12 @@ import AdminForm from "@/components/back/forms/admin-forms/AdminForm";
 import UserForm from "@/components/back/forms/user-forms/UserForm";
 import MenuForm from "@/components/back/forms/menu-forms/MenuForm";
 import HomepageForm from "@/components/back/forms/homepage-forms/HomepageForm";
+import ContentForm from "@/components/back/forms/content-forms/ContentForm";
+import ContactForm from "@/components/back/forms/contact-forms/ContactForm";
+import WebsiteForm from "@/components/back/forms/website-forms/WebsiteForm";
 
 // Interfaces
 import type { ItemDetail, Options } from "@/interface/menu-form-props";
-import ContentForm from "@/components/back/forms/content-forms/ContentForm";
 
 const BackPage = () => {
   const params = useParams();
@@ -88,6 +90,22 @@ const BackPage = () => {
             options={options as Options}
             handleAddItem={handleAddItem}
             handleRemoveItem={handleRemoveItem}
+          />
+        );
+      case "contacts":
+        return (
+          <ContactForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+            options={options as Options}
+          />
+        );
+      case "websites":
+        return (
+          <WebsiteForm
+            itemDetail={itemDetail as ItemDetail}
+            handleChange={handleChange}
+            options={options as Options}
           />
         );
       default:

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+// MUI
 import {
   Box,
   Button,
@@ -10,6 +12,9 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
+// Hooks
+import useHome from "@/hooks/front/useHome";
+
 interface FormData {
   name: string;
   email: string;
@@ -20,6 +25,8 @@ interface FormData {
 const Contact = () => {
   const [formData = {} as FormData, setFormData] = useState<FormData>();
   const [open, setOpen] = useState(false);
+
+  const { contact } = useHome();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -124,11 +131,9 @@ const Contact = () => {
           <Typography variant="h6" gutterBottom>
             聯絡資訊
           </Typography>
-          <Typography variant="body1">
-            地址：台北市中正區忠孝東路一段100號
-          </Typography>
-          <Typography variant="body1">電話：02-1234-5678</Typography>
-          <Typography variant="body1">電子郵件：info@example.com</Typography>
+          <Typography variant="body1">地址: {contact?.address}</Typography>
+          <Typography variant="body1">電話：{contact?.phone}</Typography>
+          <Typography variant="body1">電子郵件：{contact?.email}</Typography>
         </Box>
       </Box>
       <Snackbar

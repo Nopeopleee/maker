@@ -50,7 +50,7 @@ export default function RootLayout({
               <ProgressBar>
                 <CssBaseline />
                 <Navbar />
-                <main style={{ flex: 1, minHeight: "75vh" }}>{children}</main>
+                <main style={{ flex: 1, minHeight: "100vh" }}>{children}</main>
                 <Footer />
               </ProgressBar>
             </ThemeProvider>

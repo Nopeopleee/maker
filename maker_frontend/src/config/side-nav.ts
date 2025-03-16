@@ -56,10 +56,10 @@ const sideNav = [
     icon: "mdi:contact-outline",
   },
   {
-    id: "settings",
+    id: "websites",
     title: "網站設定",
     inner: "網站",
-    path: `${prefix}/settings/edit`,
+    path: `${prefix}/websites/edit`,
     icon: "bx:cog",
   },
 ];

@@ -37,6 +37,18 @@ export class HomeController {
     }
   }
 
+  @Get('contact-settings')
+  @ApiOperation({ summary: '取得聯絡資訊設定' })
+  @ApiResponse({ status: 200, type: Object })
+  async getContactSettings(): Promise<any> {
+    try {
+      return await this.homeService.getContactSettings();
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Get(':lang?/menu')
   @ApiParam({
     name: 'lang',

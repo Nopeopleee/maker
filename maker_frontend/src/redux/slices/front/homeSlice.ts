@@ -19,6 +19,8 @@ const initialState: HomeState = {
   menus: [],
   currentMenu: initPage,
   homepage: [],
+  contact: {},
+  website: {},
 };
 
 // Fetch Options
@@ -47,6 +49,16 @@ export const fetchHomepage = createAsyncThunk(
   }
 );
 
+// Fetch Contact
+export const fetchContact = createAsyncThunk(
+  "frontHome/fetchContact",
+  async () => {
+    const response = await axios.get(Api.frontend.home.contact as string);
+
+    return response.data;
+  }
+);
+
 export const frontHomeSlice = createSlice({
   name: "frontHome",
   initialState,
@@ -65,6 +77,9 @@ export const frontHomeSlice = createSlice({
     });
     builder.addCase(fetchHomepage.fulfilled, (state, action) => {
       state.homepage = action.payload;
+    });
+    builder.addCase(fetchContact.fulfilled, (state, action) => {
+      state.contact = action.payload;
     });
   },
 });
